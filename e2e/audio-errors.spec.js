@@ -31,7 +31,7 @@ test.describe('Audio Error Handling', () => {
     await page.click('button:has-text("Play")');
     
     // App should not crash - page should still be functional
-    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Spark' })).toBeVisible();
     
     // Should show error toast
     await expect(page.locator('[data-sonner-toast]')).toBeVisible({ timeout: 5000 });
