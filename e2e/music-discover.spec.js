@@ -50,12 +50,12 @@ test.describe('Music Discover Page', () => {
     await page.waitForLoadState('networkidle');
     
     // Click Trending tab
-    await page.click('text=Trending');
-    await expect(page.locator('text=Trending Tracks')).toBeVisible({ timeout: 5000 });
+    await page.getByRole('button', { name: 'Trending' }).click();
+    await expect(page.getByRole('heading', { name: 'Trending Tracks' })).toBeVisible({ timeout: 5000 });
     
     // Click back to Discover
-    await page.click('text=Discover');
-    await expect(page.locator('text=Discover New Music')).toBeVisible({ timeout: 5000 });
+    await page.getByRole('button', { name: 'Discover' }).click();
+    await expect(page.getByRole('heading', { name: 'Discover New Music' })).toBeVisible({ timeout: 5000 });
   });
 
   test('track cards should have required elements', async ({ page }) => {
