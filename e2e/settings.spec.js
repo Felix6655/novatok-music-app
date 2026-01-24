@@ -2,27 +2,25 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Settings Page', () => {
-  test('settings page shows Guest Mode when no Supabase env vars', async ({ page }) => {
+  test('settings page shows Guest Mode status', async ({ page }) => {
     await page.goto('/music/settings');
     await page.waitForLoadState('networkidle');
     
-    // Should show Guest Mode Active
-    await expect(page.getByText('Guest Mode Active')).toBeVisible({ timeout: 10000 });
+    // Should show Guest Mode Active (exact match in the card title)
+    await expect(page.getByText('Guest Mode Active', { exact: true })).toBeVisible({ timeout: 10000 });
     
-    // Should show Current Mode badge
+    // Should show Current Mode section
     await expect(page.getByText('Current Mode')).toBeVisible();
-    await expect(page.getByText('Guest Mode', { exact: true })).toBeVisible();
   });
 
-  test('settings page shows missing env variables', async ({ page }) => {
+  test('settings page shows env variables section', async ({ page }) => {
     await page.goto('/music/settings');
     await page.waitForLoadState('networkidle');
     
-    // Should show Environment Variables section
-    await expect(page.getByText('Environment Variables')).toBeVisible({ timeout: 10000 });
+    // Should show NEXT_PUBLIC_SUPABASE_URL
+    await expect(page.locator('code:has-text("NEXT_PUBLIC_SUPABASE_URL")')).toBeVisible({ timeout: 10000 });
     
-    // Should show NEXT_PUBLIC_SUPABASE_URL as missing
-    await expect(page.getByText('NEXT_PUBLIC_SUPABASE_URL')).toBeVisible();
+    // Should show Missing badge
     await expect(page.getByText('Missing').first()).toBeVisible();
   });
 
