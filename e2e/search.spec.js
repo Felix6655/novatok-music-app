@@ -24,8 +24,9 @@ test.describe('Search Functionality', () => {
     await searchInput.fill('End of Beginning');
     await page.waitForTimeout(500);
     
-    // Should find the track
-    await expect(page.locator('.bg-zinc-900').locator('text=End of Beginning')).toBeVisible({ timeout: 5000 });
+    // Should find the track in dropdown
+    const dropdown = page.locator('.bg-zinc-900\\/95');
+    await expect(dropdown.locator('text=End of Beginning').first()).toBeVisible({ timeout: 5000 });
   });
 
   test('search can find artists', async ({ page }) => {
@@ -33,9 +34,10 @@ test.describe('Search Functionality', () => {
     await searchInput.fill('Kehlani');
     await page.waitForTimeout(500);
     
-    // Should show artists section
-    await expect(page.locator('text=ARTISTS')).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('.bg-zinc-900').locator('text=Kehlani').first()).toBeVisible();
+    // Should show artists section in dropdown
+    const dropdown = page.locator('.bg-zinc-900\\/95');
+    await expect(dropdown).toBeVisible({ timeout: 5000 });
+    await expect(dropdown.locator('text=ARTISTS')).toBeVisible({ timeout: 5000 });
   });
 
   test('clicking search result plays track', async ({ page }) => {
@@ -43,8 +45,10 @@ test.describe('Search Functionality', () => {
     await searchInput.fill('Golden');
     await page.waitForTimeout(500);
     
-    // Click on the track result
-    const trackResult = page.locator('.bg-zinc-900').locator('text=Golden').first();
+    // Click on the track result in dropdown
+    const dropdown = page.locator('.bg-zinc-900\\/95');
+    await expect(dropdown).toBeVisible({ timeout: 5000 });
+    const trackResult = dropdown.locator('.hover\\:bg-white\\/10').first();
     await trackResult.click();
     
     // Player should start
