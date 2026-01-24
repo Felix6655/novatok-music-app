@@ -46,11 +46,11 @@ test.describe('Page Routes', () => {
     await page.waitForLoadState('networkidle');
     
     // Should show library heading
-    await expect(page.locator('text=Your Library')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: 'Your Library' })).toBeVisible({ timeout: 10000 });
     
     // Should have tabs for liked and recent
-    await expect(page.locator('button:has-text("Liked Songs")')).toBeVisible();
-    await expect(page.locator('button:has-text("Recent Plays")')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Liked Songs' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Recent Plays' })).toBeVisible();
   });
 
   test('lyrics page renders without errors', async ({ page }) => {
