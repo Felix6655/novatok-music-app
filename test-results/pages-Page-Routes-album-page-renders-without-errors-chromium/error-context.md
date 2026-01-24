@@ -1,56 +1,37 @@
 # Page snapshot
 
 ```yaml
-- generic [active] [ref=e1]:
-  - img [ref=e3]
-  - generic [ref=e12]:
-    - banner [ref=e13]:
-      - generic [ref=e14]:
-        - generic [ref=e15]:
-          - link "NovaTok Music Discover your sound" [ref=e16] [cursor=pointer]:
-            - /url: /music
-            - img [ref=e18]
-            - generic [ref=e21]:
-              - heading "NovaTok Music" [level=1] [ref=e22]
-              - paragraph [ref=e23]: Discover your sound
-          - generic [ref=e26]:
-            - img [ref=e27]
-            - textbox "Search tracks, artists, albums..." [ref=e30]
-          - generic [ref=e31]:
-            - link "Settings" [ref=e32] [cursor=pointer]:
-              - /url: /music/settings
-              - img [ref=e33]
-            - generic [ref=e36]:
-              - img [ref=e37]
-              - text: 0tokens
-        - link "🎵 Guest Mode Active - View settings to connect Supabase" [ref=e42] [cursor=pointer]:
-          - /url: /music/settings
-          - generic [ref=e44]: 🎵 Guest Mode Active - View settings to connect Supabase
-        - generic [ref=e45]:
-          - button "Discover" [ref=e46]:
-            - img [ref=e47]
-            - text: Discover
-          - button "Trending" [ref=e49]:
-            - img [ref=e50]
-            - text: Trending
-          - button "Liked" [ref=e53]:
-            - img [ref=e54]
-            - text: Liked
-          - button "Recent" [ref=e56]:
-            - img [ref=e57]
-            - text: Recent
-          - button "AI Studio" [ref=e60]:
-            - img [ref=e61]
-            - text: AI Studio
-          - button "Lyrics" [ref=e64]:
-            - img [ref=e65]
-            - text: Lyrics
-          - button "Karaoke" [ref=e68]:
-            - img [ref=e69]
-            - text: Karaoke
-    - main [ref=e72]:
-      - generic [ref=e73]:
-        - img [ref=e74]
-        - paragraph [ref=e76]: Loading album...
-  - region "Notifications alt+T"
+- generic [active]:
+  - alert [ref=e1]
+  - dialog "Server Error" [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - navigation [ref=e8]:
+          - button "previous" [disabled] [ref=e9]:
+            - img "previous" [ref=e10]
+          - button "next" [disabled] [ref=e12]:
+            - img "next" [ref=e13]
+          - generic [ref=e15]: 1 of 1 error
+          - generic [ref=e16]:
+            - text: Next.js (14.2.3) is outdated
+            - link "(learn more)" [ref=e18] [cursor=pointer]:
+              - /url: https://nextjs.org/docs/messages/version-staleness
+        - heading "Server Error" [level=1] [ref=e19]
+        - paragraph [ref=e20]: "Error: Cannot find module './vendor-chunks/@supabase.js' Require stack: - /app/.next/server/webpack-runtime.js - /app/.next/server/app/music/album/[id]/page.js - /app/node_modules/next/dist/server/require.js - /app/node_modules/next/dist/server/load-components.js - /app/node_modules/next/dist/build/utils.js - /app/node_modules/next/dist/server/dev/static-paths-worker.js - /app/node_modules/next/dist/compiled/jest-worker/processChild.js"
+        - generic [ref=e21]: This error happened while generating the page. Any console logs will be displayed in the terminal window.
+      - generic [ref=e22]:
+        - heading "Call Stack" [level=2] [ref=e23]
+        - group [ref=e24]:
+          - generic "Next.js" [ref=e25] [cursor=pointer]:
+            - img [ref=e26]
+            - img [ref=e28]
+            - text: Next.js
+        - generic [ref=e33]:
+          - heading "Array.reduce" [level=3] [ref=e34]
+          - generic [ref=e36]: <anonymous>
+        - group [ref=e37]:
+          - generic "Next.js" [ref=e38] [cursor=pointer]:
+            - img [ref=e39]
+            - img [ref=e41]
+            - text: Next.js
 ```
