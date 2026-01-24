@@ -125,6 +125,63 @@ The player is implemented as a global React context that:
 - Gracefully handles audio errors with toast notifications
 - Supports queue management, shuffle, and repeat modes
 
+## Testing
+
+NovaTok Music includes comprehensive E2E tests using Playwright.
+
+### Test Scripts
+
+```bash
+# Run all E2E tests (headless)
+yarn test:e2e
+
+# Run tests with UI mode (for debugging)
+yarn test:e2e:ui
+
+# Run tests in headed browser
+yarn test:e2e:headed
+
+# Run full CI test suite (lint + e2e)
+yarn test
+```
+
+### Test Coverage
+
+The test suite covers critical Guest Mode flows:
+
+| Test File | Coverage |
+|-----------|----------|
+| `music-discover.spec.js` | Track grid loads, tabs work, cards have required elements |
+| `player.spec.js` | Play starts, player persists across navigation, state saves to localStorage |
+| `likes-recents.spec.js` | Like persists, shows in Liked tab, recent plays recorded |
+| `search.spec.js` | Search returns results, click plays track, clear works |
+| `pages.spec.js` | All routes render without errors (/track, /artist, /album, /library, /lyrics, /karaoke) |
+| `audio-errors.spec.js` | Tracks with null audio_url show toast, app doesn't crash |
+
+### Running Tests in CI
+
+The tests are designed to be CI-friendly:
+- Uses headless Chromium
+- Auto-starts dev server via `webServer` config
+- Does not rely on external MP3 availability
+- Tests localStorage persistence (Guest Mode)
+
+Example GitHub Actions workflow:
+```yaml
+- name: Run tests
+  run: |
+    yarn install
+    yarn test:e2e
+```
+
+### Test Configuration
+
+See `playwright.config.js` for configuration options:
+- Base URL: `http://localhost:3000`
+- Browser: Chromium only (for speed)
+- Retries: 2 on CI, 0 locally
+- Screenshots: On failure only
+
 ## License
 
 MIT
