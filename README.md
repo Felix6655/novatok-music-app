@@ -141,7 +141,7 @@ yarn test:e2e:ui
 # Run tests in headed browser
 yarn test:e2e:headed
 
-# Run full CI test suite (lint + e2e)
+# Run full CI test suite
 yarn test
 ```
 
@@ -168,10 +168,19 @@ The tests are designed to be CI-friendly:
 
 Example GitHub Actions workflow:
 ```yaml
-- name: Run tests
-  run: |
-    yarn install
-    yarn test:e2e
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: yarn install
+      - run: npx playwright install chromium
+      - run: yarn test:e2e
 ```
 
 ### Test Configuration
