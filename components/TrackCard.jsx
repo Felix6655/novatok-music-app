@@ -68,12 +68,18 @@ export default function TrackCard({ track, allTracks = null }) {
             src={track.cover_url}
             alt={track.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
           />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center">
-            <Music2 className="w-12 h-12 text-white/40" />
-          </div>
-        )}
+        ) : null}
+        <div 
+          className={`w-full h-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 items-center justify-center ${track.cover_url ? 'hidden' : 'flex'}`}
+          style={{ display: track.cover_url ? 'none' : 'flex' }}
+        >
+          <Music2 className="w-12 h-12 text-white/40" />
+        </div>
         
         {/* Play Button Overlay */}
         <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity duration-200 ${isHovered || isCurrentTrack ? 'opacity-100' : 'opacity-0'}`}>
