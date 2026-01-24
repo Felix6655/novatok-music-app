@@ -1,0 +1,120 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic:
+    - img
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "NovaTok Music Discover your sound" [ref=e7] [cursor=pointer]:
+            - /url: /music
+            - img [ref=e9]
+            - generic [ref=e12]:
+              - heading "NovaTok Music" [level=1] [ref=e13]
+              - paragraph [ref=e14]: Discover your sound
+          - generic [ref=e17]:
+            - img [ref=e18]
+            - textbox "Search tracks, artists, albums..." [ref=e21]
+          - generic [ref=e22]:
+            - img [ref=e23]
+            - generic [ref=e28]: "0"
+            - generic [ref=e29]: tokens
+        - generic [ref=e30]: 🎵 Guest Mode - Sign in to sync your library across devices
+        - generic [ref=e31]:
+          - button "Discover" [ref=e32] [cursor=pointer]:
+            - img
+            - generic [ref=e33]: Discover
+          - button "Trending" [ref=e34] [cursor=pointer]:
+            - img
+            - generic [ref=e35]: Trending
+          - button "Liked" [ref=e36] [cursor=pointer]:
+            - img
+            - generic [ref=e37]: Liked
+          - button "Recent" [ref=e38] [cursor=pointer]:
+            - img
+            - generic [ref=e39]: Recent
+          - button "AI Studio" [ref=e40] [cursor=pointer]:
+            - img
+            - generic [ref=e41]: AI Studio
+          - button "Lyrics" [ref=e42] [cursor=pointer]:
+            - img
+            - generic [ref=e43]: Lyrics
+          - button "Karaoke" [ref=e44] [cursor=pointer]:
+            - img
+            - generic [ref=e45]: Karaoke
+    - main [ref=e46]:
+      - generic [ref=e47]:
+        - button "Back" [ref=e48] [cursor=pointer]:
+          - img
+          - text: Back
+        - generic [ref=e49]:
+          - img "Spark" [ref=e52]
+          - generic [ref=e53]:
+            - heading "Spark" [level=1] [ref=e54]
+            - link "Leon Thomas" [ref=e55] [cursor=pointer]:
+              - /url: /music/artist/a1000000-0000-0000-0000-000000000006
+            - generic [ref=e56]:
+              - generic [ref=e57]:
+                - img [ref=e58]
+                - generic [ref=e61]: 2:56
+              - generic [ref=e62]:
+                - img [ref=e63]
+                - generic [ref=e64]: 98.8K plays
+              - link "Genesis" [ref=e65] [cursor=pointer]:
+                - /url: /music/album/b1000000-0000-0000-0000-000000000006
+                - img [ref=e66]
+                - generic [ref=e69]: Genesis
+            - generic [ref=e70]:
+              - button "Play" [active] [ref=e71] [cursor=pointer]:
+                - img
+                - text: Play
+              - button [ref=e72] [cursor=pointer]:
+                - img
+              - button [ref=e73] [cursor=pointer]:
+                - img
+              - button [ref=e74] [cursor=pointer]:
+                - img
+            - generic [ref=e75]:
+              - link "Leon Thomas Artist Leon Thomas" [ref=e76] [cursor=pointer]:
+                - /url: /music/artist/a1000000-0000-0000-0000-000000000006
+                - img "Leon Thomas" [ref=e78]
+                - generic [ref=e79]:
+                  - paragraph [ref=e80]: Artist
+                  - paragraph [ref=e81]: Leon Thomas
+              - link "Genesis Album Genesis" [ref=e82] [cursor=pointer]:
+                - /url: /music/album/b1000000-0000-0000-0000-000000000006
+                - img "Genesis" [ref=e84]
+                - generic [ref=e85]:
+                  - paragraph [ref=e86]: Album
+                  - paragraph [ref=e87]: Genesis
+  - generic [ref=e91]:
+    - generic [ref=e92] [cursor=pointer]:
+      - img "Spark" [ref=e94]
+      - generic [ref=e95]:
+        - paragraph [ref=e96]: Spark
+        - paragraph [ref=e97]: Leon Thomas
+      - img [ref=e98]
+    - generic [ref=e100]:
+      - button [ref=e101] [cursor=pointer]:
+        - img
+      - button [ref=e102] [cursor=pointer]:
+        - img
+      - button [ref=e103] [cursor=pointer]:
+        - img
+    - generic [ref=e104]:
+      - generic [ref=e105]: 0:00 / 2:56
+      - generic [ref=e106]:
+        - button [ref=e107] [cursor=pointer]:
+          - img
+        - slider [ref=e112]
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e113]:
+        - img [ref=e115]
+        - generic [ref=e117]:
+          - generic [ref=e118]: Audio unavailable
+          - generic [ref=e119]: This track has no audio file.
+  - alert [ref=e120]
+```

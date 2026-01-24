@@ -1,0 +1,388 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic:
+    - img
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "NovaTok Music Discover your sound" [ref=e7] [cursor=pointer]:
+            - /url: /music
+            - img [ref=e9]
+            - generic [ref=e12]:
+              - heading "NovaTok Music" [level=1] [ref=e13]
+              - paragraph [ref=e14]: Discover your sound
+          - generic [ref=e16]:
+            - generic [ref=e17]:
+              - img [ref=e18]
+              - textbox "Search tracks, artists, albums..." [active] [ref=e21]: Kehlani
+              - button [ref=e22] [cursor=pointer]:
+                - img [ref=e23]
+            - generic [ref=e30]:
+              - generic [ref=e31]:
+                - heading "Tracks" [level=4] [ref=e32]
+                - generic [ref=e33] [cursor=pointer]:
+                  - img "Folded" [ref=e35]
+                  - generic [ref=e36]:
+                    - paragraph [ref=e37]: Folded
+                    - paragraph [ref=e38]: Kehlani
+                - generic [ref=e39] [cursor=pointer]:
+                  - img "Man I Need" [ref=e41]
+                  - generic [ref=e42]:
+                    - paragraph [ref=e43]: Man I Need
+                    - paragraph [ref=e44]: Kehlani
+                - generic [ref=e45] [cursor=pointer]:
+                  - img "Aurora" [ref=e47]
+                  - generic [ref=e48]:
+                    - paragraph [ref=e49]: Aurora
+                    - paragraph [ref=e50]: Kehlani
+                - generic [ref=e51] [cursor=pointer]:
+                  - img "Twilight Zone" [ref=e53]
+                  - generic [ref=e54]:
+                    - paragraph [ref=e55]: Twilight Zone
+                    - paragraph [ref=e56]: Kehlani
+              - generic [ref=e57]:
+                - heading "Artists" [level=4] [ref=e58]
+                - generic [ref=e59] [cursor=pointer]:
+                  - img "Kehlani" [ref=e61]
+                  - generic [ref=e62]:
+                    - paragraph [ref=e63]: Kehlani
+                    - paragraph [ref=e64]: Artist
+          - generic [ref=e65]:
+            - img [ref=e66]
+            - generic [ref=e71]: "0"
+            - generic [ref=e72]: tokens
+        - generic [ref=e73]: 🎵 Guest Mode - Sign in to sync your library across devices
+        - generic [ref=e74]:
+          - button "Discover" [ref=e75] [cursor=pointer]:
+            - img
+            - generic [ref=e76]: Discover
+          - button "Trending" [ref=e77] [cursor=pointer]:
+            - img
+            - generic [ref=e78]: Trending
+          - button "Liked" [ref=e79] [cursor=pointer]:
+            - img
+            - generic [ref=e80]: Liked
+          - button "Recent" [ref=e81] [cursor=pointer]:
+            - img
+            - generic [ref=e82]: Recent
+          - button "AI Studio" [ref=e83] [cursor=pointer]:
+            - img
+            - generic [ref=e84]: AI Studio
+          - button "Lyrics" [ref=e85] [cursor=pointer]:
+            - img
+            - generic [ref=e86]: Lyrics
+          - button "Karaoke" [ref=e87] [cursor=pointer]:
+            - img
+            - generic [ref=e88]: Karaoke
+    - main [ref=e89]:
+      - generic [ref=e90]:
+        - generic [ref=e91]:
+          - heading "Discover New Music" [level=2] [ref=e92]
+          - paragraph [ref=e93]: Explore the latest releases
+        - generic [ref=e94]:
+          - generic [ref=e95] [cursor=pointer]:
+            - generic [ref=e96]:
+              - img "Twilight Zone" [ref=e97]
+              - button [ref=e99]:
+                - img
+            - generic [ref=e100]:
+              - heading "Twilight Zone" [level=3] [ref=e101]
+              - paragraph [ref=e102]: Kehlani
+              - generic [ref=e103]:
+                - generic [ref=e104]: 3:23
+                - generic [ref=e105]:
+                  - button [ref=e106]:
+                    - img
+                  - button [ref=e107]:
+                    - img
+          - generic [ref=e108] [cursor=pointer]:
+            - generic [ref=e109]:
+              - img "Bloom" [ref=e110]
+              - button [ref=e112]:
+                - img
+            - generic [ref=e113]:
+              - heading "Bloom" [level=3] [ref=e114]
+              - paragraph [ref=e115]: Djo
+              - generic [ref=e116]:
+                - generic [ref=e117]: 3:41
+                - generic [ref=e118]:
+                  - button [ref=e119]:
+                    - img
+                  - button [ref=e120]:
+                    - img
+          - generic [ref=e121] [cursor=pointer]:
+            - generic [ref=e122]:
+              - img "Spark" [ref=e123]
+              - button [ref=e125]:
+                - img
+            - generic [ref=e126]:
+              - heading "Spark" [level=3] [ref=e127]
+              - paragraph [ref=e128]: Leon Thomas
+              - generic [ref=e129]:
+                - generic [ref=e130]: 2:56
+                - generic [ref=e131]:
+                  - button [ref=e132]:
+                    - img
+                  - button [ref=e133]:
+                    - img
+          - generic [ref=e134] [cursor=pointer]:
+            - generic [ref=e135]:
+              - img "Drift Away" [ref=e136]
+              - button [ref=e138]:
+                - img
+            - generic [ref=e139]:
+              - heading "Drift Away" [level=3] [ref=e140]
+              - paragraph [ref=e141]: Sabrina Carpenter
+              - generic [ref=e142]:
+                - generic [ref=e143]: 3:18
+                - generic [ref=e144]:
+                  - button [ref=e145]:
+                    - img
+                  - button [ref=e146]:
+                    - img
+          - generic [ref=e147] [cursor=pointer]:
+            - generic [ref=e148]:
+              - img "Echo" [ref=e149]
+              - button [ref=e151]:
+                - img
+            - generic [ref=e152]:
+              - heading "Echo" [level=3] [ref=e153]
+              - paragraph [ref=e154]: sombr
+              - generic [ref=e155]:
+                - generic [ref=e156]: 3:32
+                - generic [ref=e157]:
+                  - button [ref=e158]:
+                    - img
+                  - button [ref=e159]:
+                    - img
+          - generic [ref=e160] [cursor=pointer]:
+            - generic [ref=e161]:
+              - img "Pulse" [ref=e162]
+              - button [ref=e164]:
+                - img
+            - generic [ref=e165]:
+              - heading "Pulse" [level=3] [ref=e166]
+              - paragraph [ref=e167]: HUNTR/X
+              - generic [ref=e168]:
+                - generic [ref=e169]: 3:09
+                - generic [ref=e170]:
+                  - button [ref=e171]:
+                    - img
+                  - button [ref=e172]:
+                    - img
+          - generic [ref=e173] [cursor=pointer]:
+            - generic [ref=e174]:
+              - img "Aurora" [ref=e175]
+              - button [ref=e177]:
+                - img
+            - generic [ref=e178]:
+              - heading "Aurora" [level=3] [ref=e179]
+              - paragraph [ref=e180]: Kehlani
+              - generic [ref=e181]:
+                - generic [ref=e182]: 3:54
+                - generic [ref=e183]:
+                  - button [ref=e184]:
+                    - img
+                  - button [ref=e185]:
+                    - img
+          - generic [ref=e186] [cursor=pointer]:
+            - generic [ref=e187]:
+              - img "Waves" [ref=e188]
+              - button [ref=e190]:
+                - img
+            - generic [ref=e191]:
+              - heading "Waves" [level=3] [ref=e192]
+              - paragraph [ref=e193]: Djo
+              - generic [ref=e194]:
+                - generic [ref=e195]: 2:47
+                - generic [ref=e196]:
+                  - button [ref=e197]:
+                    - img
+                  - button [ref=e198]:
+                    - img
+          - generic [ref=e199] [cursor=pointer]:
+            - generic [ref=e200]:
+              - img "Cosmic Dance" [ref=e201]
+              - button [ref=e203]:
+                - img
+            - generic [ref=e204]:
+              - heading "Cosmic Dance" [level=3] [ref=e205]
+              - paragraph [ref=e206]: Leon Thomas
+              - generic [ref=e207]:
+                - generic [ref=e208]: 4:05
+                - generic [ref=e209]:
+                  - button [ref=e210]:
+                    - img
+                  - button [ref=e211]:
+                    - img
+          - generic [ref=e212] [cursor=pointer]:
+            - generic [ref=e213]:
+              - img "Neon Nights" [ref=e214]
+              - button [ref=e216]:
+                - img
+            - generic [ref=e217]:
+              - heading "Neon Nights" [level=3] [ref=e218]
+              - paragraph [ref=e219]: Sabrina Carpenter
+              - generic [ref=e220]:
+                - generic [ref=e221]: 2:58
+                - generic [ref=e222]:
+                  - button [ref=e223]:
+                    - img
+                  - button [ref=e224]:
+                    - img
+          - generic [ref=e225] [cursor=pointer]:
+            - generic [ref=e226]:
+              - img "Electric Dreams" [ref=e227]
+              - button [ref=e229]:
+                - img
+            - generic [ref=e230]:
+              - heading "Electric Dreams" [level=3] [ref=e231]
+              - paragraph [ref=e232]: sombr
+              - generic [ref=e233]:
+                - generic [ref=e234]: 3:21
+                - generic [ref=e235]:
+                  - button [ref=e236]:
+                    - img
+                  - button [ref=e237]:
+                    - img
+          - generic [ref=e238] [cursor=pointer]:
+            - generic [ref=e239]:
+              - img "Starlight" [ref=e240]
+              - button [ref=e242]:
+                - img
+            - generic [ref=e243]:
+              - heading "Starlight" [level=3] [ref=e244]
+              - paragraph [ref=e245]: HUNTR/X
+              - generic [ref=e246]:
+                - generic [ref=e247]: 3:44
+                - generic [ref=e248]:
+                  - button [ref=e249]:
+                    - img
+                  - button [ref=e250]:
+                    - img
+          - generic [ref=e251] [cursor=pointer]:
+            - generic [ref=e252]:
+              - img "Man I Need" [ref=e253]
+              - button [ref=e255]:
+                - img
+            - generic [ref=e256]:
+              - heading "Man I Need" [level=3] [ref=e257]
+              - paragraph [ref=e258]: Kehlani
+              - generic [ref=e259]:
+                - generic [ref=e260]: 3:04
+                - generic [ref=e261]:
+                  - button [ref=e262]:
+                    - img
+                  - button [ref=e263]:
+                    - img
+          - generic [ref=e264] [cursor=pointer]:
+            - generic [ref=e265]:
+              - img "Ordinary" [ref=e266]
+              - button [ref=e268]:
+                - img
+            - generic [ref=e269]:
+              - heading "Ordinary" [level=3] [ref=e270]
+              - paragraph [ref=e271]: Djo
+              - generic [ref=e272]:
+                - generic [ref=e273]: 3:06
+                - generic [ref=e274]:
+                  - button [ref=e275]:
+                    - img
+                  - button [ref=e276]:
+                    - img
+          - generic [ref=e277] [cursor=pointer]:
+            - generic [ref=e278]:
+              - img "MUTT" [ref=e279]
+              - button [ref=e281]:
+                - img
+            - generic [ref=e282]:
+              - heading "MUTT" [level=3] [ref=e283]
+              - paragraph [ref=e284]: Leon Thomas
+              - generic [ref=e285]:
+                - generic [ref=e286]: 3:13
+                - generic [ref=e287]:
+                  - button [ref=e288]:
+                    - img
+                  - button [ref=e289]:
+                    - img
+          - generic [ref=e290] [cursor=pointer]:
+            - generic [ref=e291]:
+              - img "Manchild" [ref=e292]
+              - button [ref=e294]:
+                - img
+            - generic [ref=e295]:
+              - heading "Manchild" [level=3] [ref=e296]
+              - paragraph [ref=e297]: Sabrina Carpenter
+              - generic [ref=e298]:
+                - generic [ref=e299]: 3:33
+                - generic [ref=e300]:
+                  - button [ref=e301]:
+                    - img
+                  - button [ref=e302]:
+                    - img
+          - generic [ref=e303] [cursor=pointer]:
+            - generic [ref=e304]:
+              - img "Folded" [ref=e305]
+              - button [ref=e307]:
+                - img
+            - generic [ref=e308]:
+              - heading "Folded" [level=3] [ref=e309]
+              - paragraph [ref=e310]: Kehlani
+              - generic [ref=e311]:
+                - generic [ref=e312]: 3:58
+                - generic [ref=e313]:
+                  - button [ref=e314]:
+                    - img
+                  - button [ref=e315]:
+                    - img
+          - generic [ref=e316] [cursor=pointer]:
+            - generic [ref=e317]:
+              - img "back to friends" [ref=e318]
+              - button [ref=e320]:
+                - img
+            - generic [ref=e321]:
+              - heading "back to friends" [level=3] [ref=e322]
+              - paragraph [ref=e323]: sombr
+              - generic [ref=e324]:
+                - generic [ref=e325]: 3:19
+                - generic [ref=e326]:
+                  - button [ref=e327]:
+                    - img
+                  - button [ref=e328]:
+                    - img
+          - generic [ref=e329] [cursor=pointer]:
+            - generic [ref=e330]:
+              - img "End of Beginning" [ref=e331]
+              - button [ref=e333]:
+                - img
+            - generic [ref=e334]:
+              - heading "End of Beginning" [level=3] [ref=e335]
+              - paragraph [ref=e336]: Djo
+              - generic [ref=e337]:
+                - generic [ref=e338]: 2:39
+                - generic [ref=e339]:
+                  - button [ref=e340]:
+                    - img
+                  - button [ref=e341]:
+                    - img
+          - generic [ref=e342] [cursor=pointer]:
+            - generic [ref=e343]:
+              - img "Golden" [ref=e344]
+              - button [ref=e346]:
+                - img
+            - generic [ref=e347]:
+              - heading "Golden" [level=3] [ref=e348]
+              - paragraph [ref=e349]: HUNTR/X
+              - generic [ref=e350]:
+                - generic [ref=e351]: 3:12
+                - generic [ref=e352]:
+                  - button [ref=e353]:
+                    - img
+                  - button [ref=e354]:
+                    - img
+  - region "Notifications alt+T"
+  - alert [ref=e355]
+```
