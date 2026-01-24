@@ -1,0 +1,120 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic:
+    - img
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "NovaTok Music Discover your sound" [ref=e7] [cursor=pointer]:
+            - /url: /music
+            - img [ref=e9]
+            - generic [ref=e12]:
+              - heading "NovaTok Music" [level=1] [ref=e13]
+              - paragraph [ref=e14]: Discover your sound
+          - generic [ref=e17]:
+            - img [ref=e18]
+            - textbox "Search tracks, artists, albums..." [ref=e21]
+          - generic [ref=e22]:
+            - link "Settings" [ref=e23] [cursor=pointer]:
+              - /url: /music/settings
+              - img [ref=e24]
+            - generic [ref=e27]:
+              - img [ref=e28]
+              - generic [ref=e33]: "0"
+              - generic [ref=e34]: tokens
+        - link "🎵 Guest Mode Active - View settings to connect Supabase" [ref=e35] [cursor=pointer]:
+          - /url: /music/settings
+          - generic [ref=e37]: 🎵 Guest Mode Active - View settings to connect Supabase
+        - generic [ref=e38]:
+          - button "Discover" [ref=e39] [cursor=pointer]:
+            - img
+            - generic [ref=e40]: Discover
+          - button "Trending" [ref=e41] [cursor=pointer]:
+            - img
+            - generic [ref=e42]: Trending
+          - button "Liked" [ref=e43] [cursor=pointer]:
+            - img
+            - generic [ref=e44]: Liked
+          - button "Recent" [ref=e45] [cursor=pointer]:
+            - img
+            - generic [ref=e46]: Recent
+          - button "AI Studio" [ref=e47] [cursor=pointer]:
+            - img
+            - generic [ref=e48]: AI Studio
+          - button "Lyrics" [ref=e49] [cursor=pointer]:
+            - img
+            - generic [ref=e50]: Lyrics
+          - button "Karaoke" [ref=e51] [cursor=pointer]:
+            - img
+            - generic [ref=e52]: Karaoke
+    - main [ref=e53]:
+      - generic [ref=e54]:
+        - link "Back to Music" [ref=e55] [cursor=pointer]:
+          - /url: /music
+          - img
+          - text: Back to Music
+        - heading "Settings" [level=1] [ref=e56]
+        - paragraph [ref=e57]: Connection status and app configuration
+        - generic [ref=e58]:
+          - generic [ref=e59]:
+            - generic [ref=e60]:
+              - img [ref=e61]
+              - text: Guest Mode Active
+            - generic [ref=e63]: Your data is stored locally in this browser
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - generic [ref=e67]: Current Mode
+              - generic [ref=e68]: Guest Mode
+            - generic [ref=e70]:
+              - img [ref=e71]
+              - paragraph [ref=e74]:
+                - strong [ref=e75]: Guest Mode
+                - text: means your likes, recent plays, and player state are saved to your browser's localStorage. This data won't sync across devices or browsers.
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]: Environment Variables
+            - generic [ref=e79]: Required variables for Supabase integration
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - generic [ref=e83]:
+                - img [ref=e84]
+                - code [ref=e88]: NEXT_PUBLIC_SUPABASE_URL
+              - generic [ref=e89]: Missing
+            - generic [ref=e90]:
+              - generic [ref=e91]:
+                - img [ref=e92]
+                - code [ref=e96]: NEXT_PUBLIC_SUPABASE_ANON_KEY
+              - generic [ref=e97]: Missing
+            - generic [ref=e99]:
+              - img [ref=e100]
+              - generic [ref=e102]:
+                - paragraph [ref=e103]: "To enable Supabase sync, add these environment variables to your deployment:"
+                - link "Get credentials at supabase.com" [ref=e104] [cursor=pointer]:
+                  - /url: https://supabase.com
+                  - text: Get credentials at supabase.com
+                  - img [ref=e105]
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - img [ref=e112]
+              - text: Demo Data
+            - generic [ref=e115]: Local seed data loaded for demo purposes
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - generic [ref=e119]: "20"
+              - generic [ref=e120]: Tracks
+            - generic [ref=e121]:
+              - generic [ref=e122]: "6"
+              - generic [ref=e123]: Artists
+            - generic [ref=e124]:
+              - generic [ref=e125]: "6"
+              - generic [ref=e126]: Albums
+        - generic [ref=e127]:
+          - paragraph [ref=e128]: NovaTok Music v1.0.0
+          - paragraph [ref=e129]: Built with Next.js 14 + Tailwind CSS
+  - region "Notifications alt+T"
+  - alert [ref=e130]
+```
