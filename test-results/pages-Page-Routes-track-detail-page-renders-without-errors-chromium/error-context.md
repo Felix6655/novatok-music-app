@@ -1,7 +1,7 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e1]:
+- generic [active] [ref=e1]:
   - generic:
     - img
   - generic [ref=e3]:
@@ -50,24 +50,24 @@
           - img
           - text: Back
         - generic [ref=e49]:
-          - img "Spark" [ref=e52]
+          - img "Golden" [ref=e52]
           - generic [ref=e53]:
-            - heading "Spark" [level=1] [ref=e54]
-            - link "Leon Thomas" [ref=e55] [cursor=pointer]:
-              - /url: /music/artist/a1000000-0000-0000-0000-000000000006
+            - heading "Golden" [level=1] [ref=e54]
+            - link "HUNTR/X" [ref=e55] [cursor=pointer]:
+              - /url: /music/artist/a1000000-0000-0000-0000-000000000001
             - generic [ref=e56]:
               - generic [ref=e57]:
                 - img [ref=e58]
-                - generic [ref=e61]: 2:56
+                - generic [ref=e61]: 3:12
               - generic [ref=e62]:
                 - img [ref=e63]
-                - generic [ref=e64]: 98.8K plays
-              - link "Genesis" [ref=e65] [cursor=pointer]:
-                - /url: /music/album/b1000000-0000-0000-0000-000000000006
+                - generic [ref=e64]: 15.4K plays
+              - link "K-Pop Demon Hunters" [ref=e65] [cursor=pointer]:
+                - /url: /music/album/b1000000-0000-0000-0000-000000000001
                 - img [ref=e66]
-                - generic [ref=e69]: Genesis
+                - generic [ref=e69]: K-Pop Demon Hunters
             - generic [ref=e70]:
-              - button "Play" [active] [ref=e71] [cursor=pointer]:
+              - button "Play" [ref=e71] [cursor=pointer]:
                 - img
                 - text: Play
               - button [ref=e72] [cursor=pointer]:
@@ -77,44 +77,18 @@
               - button [ref=e74] [cursor=pointer]:
                 - img
             - generic [ref=e75]:
-              - link "Leon Thomas Artist Leon Thomas" [ref=e76] [cursor=pointer]:
-                - /url: /music/artist/a1000000-0000-0000-0000-000000000006
-                - img "Leon Thomas" [ref=e78]
+              - link "HUNTR/X Artist HUNTR/X" [ref=e76] [cursor=pointer]:
+                - /url: /music/artist/a1000000-0000-0000-0000-000000000001
+                - img "HUNTR/X" [ref=e78]
                 - generic [ref=e79]:
                   - paragraph [ref=e80]: Artist
-                  - paragraph [ref=e81]: Leon Thomas
-              - link "Genesis Album Genesis" [ref=e82] [cursor=pointer]:
-                - /url: /music/album/b1000000-0000-0000-0000-000000000006
-                - img "Genesis" [ref=e84]
+                  - paragraph [ref=e81]: HUNTR/X
+              - link "K-Pop Demon Hunters Album K-Pop Demon Hunters" [ref=e82] [cursor=pointer]:
+                - /url: /music/album/b1000000-0000-0000-0000-000000000001
+                - img "K-Pop Demon Hunters" [ref=e84]
                 - generic [ref=e85]:
                   - paragraph [ref=e86]: Album
-                  - paragraph [ref=e87]: Genesis
-  - generic [ref=e91]:
-    - generic [ref=e92] [cursor=pointer]:
-      - img "Spark" [ref=e94]
-      - generic [ref=e95]:
-        - paragraph [ref=e96]: Spark
-        - paragraph [ref=e97]: Leon Thomas
-      - img [ref=e98]
-    - generic [ref=e100]:
-      - button [ref=e101] [cursor=pointer]:
-        - img
-      - button [ref=e102] [cursor=pointer]:
-        - img
-      - button [ref=e103] [cursor=pointer]:
-        - img
-    - generic [ref=e104]:
-      - generic [ref=e105]: 0:00 / 2:56
-      - generic [ref=e106]:
-        - button [ref=e107] [cursor=pointer]:
-          - img
-        - slider [ref=e112]
-  - region "Notifications alt+T":
-    - list:
-      - listitem [ref=e113]:
-        - img [ref=e115]
-        - generic [ref=e117]:
-          - generic [ref=e118]: Audio unavailable
-          - generic [ref=e119]: This track has no audio file.
-  - alert [ref=e120]
+                  - paragraph [ref=e87]: K-Pop Demon Hunters
+  - region "Notifications alt+T"
+  - alert [ref=e88]
 ```
