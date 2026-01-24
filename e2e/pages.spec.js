@@ -7,8 +7,8 @@ test.describe('Page Routes', () => {
     await page.goto('/music/track/t1000000-0000-0000-0000-000000000001');
     await page.waitForLoadState('networkidle');
     
-    // Should show track title
-    await expect(page.locator('h1')).toBeVisible({ timeout: 10000 });
+    // Should show track title (Golden)
+    await expect(page.getByRole('heading', { name: 'Golden' })).toBeVisible({ timeout: 10000 });
     
     // Should have play button
     await expect(page.locator('button:has-text("Play")')).toBeVisible();
@@ -22,8 +22,8 @@ test.describe('Page Routes', () => {
     await page.goto('/music/artist/a1000000-0000-0000-0000-000000000001');
     await page.waitForLoadState('networkidle');
     
-    // Should show artist name
-    await expect(page.locator('h1')).toBeVisible({ timeout: 10000 });
+    // Should show artist name (HUNTR/X)
+    await expect(page.getByRole('heading', { name: 'HUNTR/X' })).toBeVisible({ timeout: 10000 });
     
     // Should have play all button
     await expect(page.locator('button:has-text("Play All")')).toBeVisible();
@@ -34,8 +34,8 @@ test.describe('Page Routes', () => {
     await page.goto('/music/album/b1000000-0000-0000-0000-000000000001');
     await page.waitForLoadState('networkidle');
     
-    // Should show album title
-    await expect(page.locator('h1')).toBeVisible({ timeout: 10000 });
+    // Should show album title (K-Pop Demon Hunters)
+    await expect(page.getByRole('heading', { name: 'K-Pop Demon Hunters' })).toBeVisible({ timeout: 10000 });
     
     // Should have play all button
     await expect(page.locator('button:has-text("Play All")')).toBeVisible();
