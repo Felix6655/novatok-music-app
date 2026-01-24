@@ -30,12 +30,12 @@ test.describe('Music Discover Page', () => {
     await page.goto('/music');
     
     // Check header elements
-    await expect(page.locator('text=NovaTok Music')).toBeVisible();
+    await expect(page.locator('h1:has-text("NovaTok Music")')).toBeVisible();
     await expect(page.locator('input[placeholder*="Search"]')).toBeVisible();
-    await expect(page.locator('text=Discover')).toBeVisible();
-    await expect(page.locator('text=Trending')).toBeVisible();
-    await expect(page.locator('text=Liked')).toBeVisible();
-    await expect(page.locator('text=Recent')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Discover' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Trending' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Liked' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Recent' })).toBeVisible();
   });
 
   test('should show Guest Mode banner', async ({ page }) => {
