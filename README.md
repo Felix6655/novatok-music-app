@@ -134,6 +134,9 @@ yarn test
 | `search.spec.js` | 6 | Search dropdown, results, artists, clear |
 | `pages.spec.js` | 8 | All routes render without errors |
 | `audio-errors.spec.js` | 3 | Error handling for missing audio |
+| `settings.spec.js` | 4 | Guest Mode status, env vars display |
+
+**Total: 38 tests**
 
 ### CI Configuration
 
