@@ -1,9 +1,11 @@
 // Robots.txt for NovaTok Music
 // Controls search engine crawling behavior
-// Uses ONLY NEXT_PUBLIC_SITE_URL for canonical URLs
+//
+// ⚠️ IMPORTANT: Set NEXT_PUBLIC_SITE_URL in Vercel for production.
+// Without it, sitemap reference will point to localhost.
 
 export default function robots() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   
   return {
     rules: [

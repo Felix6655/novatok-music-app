@@ -6,8 +6,9 @@ import GlobalPlayer from '@/components/player/GlobalPlayer';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// SEO Configuration - Use ONLY NEXT_PUBLIC_SITE_URL
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
+// ⚠️ IMPORTANT: Set NEXT_PUBLIC_SITE_URL in Vercel for production.
+// Without it, SEO metadata will use localhost URLs.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),

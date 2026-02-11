@@ -1,9 +1,11 @@
 // Dynamic Sitemap for NovaTok Music
 // Generates XML sitemap for search engine indexing
-// Uses ONLY NEXT_PUBLIC_SITE_URL for canonical URLs
+//
+// ⚠️ IMPORTANT: Set NEXT_PUBLIC_SITE_URL in Vercel for production.
+// Without it, sitemap URLs will be localhost which breaks SEO.
 
 export default function sitemap() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   
   const routes = [
     {
