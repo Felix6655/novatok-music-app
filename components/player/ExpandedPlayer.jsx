@@ -7,10 +7,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, 
   ChevronDown, Loader2, Music2, Shuffle, Repeat, Repeat1,
-  ListMusic, X, Heart
+  ListMusic, X, Heart, Share2, AlertCircle
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { isTrackLiked, toggleLike } from '@/lib/data/data-service';
+import { toast } from 'sonner';
+import { getSiteUrl } from '@/lib/env';
 
 export default function ExpandedPlayer() {
   const {
@@ -19,6 +21,7 @@ export default function ExpandedPlayer() {
     queueIndex,
     isPlaying,
     isLoading,
+    error,
     currentTime,
     duration,
     volume,
@@ -52,11 +55,19 @@ export default function ExpandedPlayer() {
     if (!currentTrack) return;
     const newLiked = await toggleLike(currentTrack.id);
     setLiked(newLiked);
+    toast.success(newLiked ? 'Added to likes' : 'Removed from likes');
+  };
+
+  const handleShare = () => {
+    const url = `${getSiteUrl()}/music/track/${currentTrack?.id}`;
+    navigator.clipboard.writeText(url);
+    toast.success('Link copied to clipboard');
   };
 
   if (!isExpanded || !currentTrack) return null;
 
   const formatTime = (seconds) => {
+    if (!seconds || isNaN(seconds)) return '0:00';
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -67,6 +78,8 @@ export default function ExpandedPlayer() {
     const currentIndex = modes.indexOf(repeat);
     setRepeat(modes[(currentIndex + 1) % 3]);
   };
+
+  const hasMultipleTracks = queue.length > 1;
 
   return (
     <div className="fixed inset-0 z-[100] bg-gradient-to-b from-purple-900/95 via-black/98 to-black backdrop-blur-xl flex flex-col">
@@ -95,7 +108,7 @@ export default function ExpandedPlayer() {
         {/* Main Content */}
         <div className={`flex-1 flex flex-col items-center justify-center p-8 transition-all ${showQueue ? 'hidden md:flex md:w-1/2' : 'w-full'}`}>
           {/* Album Art */}
-          <div className="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20 mb-8">
+          <div className="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20 mb-8 relative">
             {currentTrack.cover_url ? (
               <img 
                 src={currentTrack.cover_url} 
@@ -105,6 +118,14 @@ export default function ExpandedPlayer() {
             ) : (
               <div className="w-full h-full bg-purple-500/20 flex items-center justify-center">
                 <Music2 className="w-24 h-24 text-purple-400" />
+              </div>
+            )}
+            {error && (
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <div className="text-center">
+                  <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-2" />
+                  <p className="text-white/80 text-sm">Audio unavailable</p>
+                </div>
               </div>
             )}
           </div>
@@ -123,6 +144,7 @@ export default function ExpandedPlayer() {
               max={duration || 100}
               step={0.1}
               className="w-full"
+              disabled={error}
             />
             <div className="flex justify-between text-white/60 text-sm mt-2">
               <span>{formatTime(currentTime)}</span>
@@ -145,7 +167,8 @@ export default function ExpandedPlayer() {
               variant="ghost"
               size="icon"
               onClick={previous}
-              className="text-white/80 hover:text-white hover:bg-white/10 w-12 h-12"
+              disabled={!hasMultipleTracks}
+              className="text-white/80 hover:text-white hover:bg-white/10 w-12 h-12 disabled:opacity-30"
             >
               <SkipBack className="w-6 h-6" />
             </Button>
@@ -154,11 +177,13 @@ export default function ExpandedPlayer() {
               variant="ghost"
               size="icon"
               onClick={togglePlay}
-              disabled={isLoading}
-              className="w-16 h-16 rounded-full bg-white text-black hover:bg-white/90 hover:scale-105 transition-transform"
+              disabled={isLoading || error}
+              className="w-16 h-16 rounded-full bg-white text-black hover:bg-white/90 hover:scale-105 transition-transform disabled:opacity-50"
             >
               {isLoading ? (
                 <Loader2 className="w-8 h-8 animate-spin" />
+              ) : error ? (
+                <AlertCircle className="w-8 h-8 text-red-500" />
               ) : isPlaying ? (
                 <Pause className="w-8 h-8" />
               ) : (
@@ -170,7 +195,8 @@ export default function ExpandedPlayer() {
               variant="ghost"
               size="icon"
               onClick={next}
-              className="text-white/80 hover:text-white hover:bg-white/10 w-12 h-12"
+              disabled={!hasMultipleTracks}
+              className="text-white/80 hover:text-white hover:bg-white/10 w-12 h-12 disabled:opacity-30"
             >
               <SkipForward className="w-6 h-6" />
             </Button>
@@ -185,7 +211,7 @@ export default function ExpandedPlayer() {
             </Button>
           </div>
 
-          {/* Volume & Like */}
+          {/* Volume & Actions */}
           <div className="flex items-center gap-4 w-full max-w-md">
             <Button
               variant="ghost"
@@ -194,6 +220,15 @@ export default function ExpandedPlayer() {
               className={`hover:bg-white/10 ${liked ? 'text-pink-500' : 'text-white/60 hover:text-white'}`}
             >
               <Heart className={`w-5 h-5 ${liked ? 'fill-current' : ''}`} />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleShare}
+              className="text-white/60 hover:text-white hover:bg-white/10"
+            >
+              <Share2 className="w-5 h-5" />
             </Button>
             
             <div className="flex items-center gap-2 flex-1">
@@ -225,7 +260,7 @@ export default function ExpandedPlayer() {
         {showQueue && (
           <div className="w-full md:w-1/2 border-l border-white/10 flex flex-col">
             <div className="p-4 border-b border-white/10 flex items-center justify-between">
-              <h3 className="text-white font-semibold">Queue ({queue.length})</h3>
+              <h3 className="text-white font-semibold">Up Next ({queue.length})</h3>
               <Button
                 variant="ghost"
                 size="icon"

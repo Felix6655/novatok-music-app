@@ -1,46 +1,43 @@
 'use client';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { 
-  Sparkles, TrendingUp, Heart, Clock, Wand2, FileText, Mic 
+  Sparkles, TrendingUp, Heart, Clock, Wand2, FileText, Mic, Upload 
 } from 'lucide-react';
 
 const tabs = [
-  { id: 'discover', label: 'Discover', icon: Sparkles, href: '/music', param: null },
-  { id: 'trending', label: 'Trending', icon: TrendingUp, href: '/music', param: 'trending' },
-  { id: 'liked', label: 'Liked', icon: Heart, href: '/music', param: 'liked' },
-  { id: 'recent', label: 'Recent', icon: Clock, href: '/music', param: 'recent' },
-  { id: 'ai-studio', label: 'AI Studio', icon: Wand2, href: '/music/ai-studio', param: null },
-  { id: 'lyrics', label: 'Lyrics', icon: FileText, href: '/music/lyrics', param: null },
-  { id: 'karaoke', label: 'Karaoke', icon: Mic, href: '/music/karaoke', param: null },
+  { id: 'discover', label: 'Discover', icon: Sparkles, href: '/music' },
+  { id: 'trending', label: 'Trending', icon: TrendingUp, href: '/music/trending' },
+  { id: 'liked', label: 'Liked', icon: Heart, href: '/music/liked' },
+  { id: 'recent', label: 'Recent', icon: Clock, href: '/music/recent' },
+  { id: 'upload', label: 'Upload', icon: Upload, href: '/music/upload' },
+  { id: 'lyrics', label: 'Lyrics', icon: FileText, href: '/music/lyrics' },
+  { id: 'karaoke', label: 'Karaoke', icon: Mic, href: '/music/karaoke' },
+  { id: 'ai-studio', label: 'AI Studio', icon: Wand2, href: '/music/ai-studio' },
 ];
 
 export default function TabsNav() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentTab = searchParams.get('tab');
 
   const getActiveTab = () => {
+    if (pathname === '/music') return 'discover';
+    if (pathname === '/music/trending') return 'trending';
+    if (pathname === '/music/liked') return 'liked';
+    if (pathname === '/music/recent') return 'recent';
+    if (pathname === '/music/upload') return 'upload';
     if (pathname === '/music/ai-studio') return 'ai-studio';
     if (pathname === '/music/lyrics') return 'lyrics';
     if (pathname === '/music/karaoke') return 'karaoke';
     if (pathname === '/music/library') return 'library';
-    if (currentTab === 'trending') return 'trending';
-    if (currentTab === 'liked') return 'liked';
-    if (currentTab === 'recent') return 'recent';
-    return 'discover';
+    return '';
   };
 
   const activeTab = getActiveTab();
 
   const handleTabClick = (tab) => {
-    if (tab.param) {
-      router.push(`${tab.href}?tab=${tab.param}`);
-    } else {
-      router.push(tab.href);
-    }
+    router.push(tab.href);
   };
 
   return (
