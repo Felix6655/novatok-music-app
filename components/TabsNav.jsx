@@ -2,8 +2,9 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/context/AuthContext';
 import { 
-  Sparkles, TrendingUp, Heart, Clock, Wand2, FileText, Mic, Upload 
+  Sparkles, TrendingUp, Heart, Clock, Wand2, FileText, Mic, Upload, ListMusic, Music2, User 
 } from 'lucide-react';
 
 const tabs = [
@@ -11,6 +12,8 @@ const tabs = [
   { id: 'trending', label: 'Trending', icon: TrendingUp, href: '/music/trending' },
   { id: 'liked', label: 'Liked', icon: Heart, href: '/music/liked' },
   { id: 'recent', label: 'Recent', icon: Clock, href: '/music/recent' },
+  { id: 'playlists', label: 'Playlists', icon: ListMusic, href: '/music/playlists', authRequired: true },
+  { id: 'my-tracks', label: 'My Tracks', icon: Music2, href: '/music/my-tracks', authRequired: true },
   { id: 'upload', label: 'Upload', icon: Upload, href: '/music/upload' },
   { id: 'lyrics', label: 'Lyrics', icon: FileText, href: '/music/lyrics' },
   { id: 'karaoke', label: 'Karaoke', icon: Mic, href: '/music/karaoke' },
@@ -20,17 +23,19 @@ const tabs = [
 export default function TabsNav() {
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
 
   const getActiveTab = () => {
     if (pathname === '/music') return 'discover';
     if (pathname === '/music/trending') return 'trending';
     if (pathname === '/music/liked') return 'liked';
     if (pathname === '/music/recent') return 'recent';
+    if (pathname === '/music/playlists' || pathname.startsWith('/music/playlist/')) return 'playlists';
+    if (pathname === '/music/my-tracks') return 'my-tracks';
     if (pathname === '/music/upload') return 'upload';
     if (pathname === '/music/ai-studio') return 'ai-studio';
     if (pathname === '/music/lyrics') return 'lyrics';
     if (pathname === '/music/karaoke') return 'karaoke';
-    if (pathname === '/music/library') return 'library';
     return '';
   };
 
@@ -40,9 +45,12 @@ export default function TabsNav() {
     router.push(tab.href);
   };
 
+  // Filter tabs based on auth status
+  const visibleTabs = tabs.filter(tab => !tab.authRequired || isAuthenticated);
+
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-      {tabs.map((tab) => {
+      {visibleTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
         

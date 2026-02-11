@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -10,14 +10,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { isGuestMode } from '@/lib/env';
 import { uploadTrack } from '@/lib/data/data-service';
+import { useAuth } from '@/lib/context/AuthContext';
 import { 
   ArrowLeft, Upload, Music2, Image, Loader2, 
-  CheckCircle2, AlertCircle, CloudOff 
+  CheckCircle2, AlertCircle, CloudOff, LogIn 
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function UploadContent() {
   const router = useRouter();
+  const { user, isAuthenticated, isSupabaseConfigured, loading: authLoading } = useAuth();
   const [title, setTitle] = useState('');
   const [artist, setArtist] = useState('');
   const [audioFile, setAudioFile] = useState(null);
@@ -79,7 +81,7 @@ export default function UploadContent() {
         setUploadProgress(prev => Math.min(prev + 10, 90));
       }, 200);
       
-      const track = await uploadTrack({ title, artist, audioFile, coverFile });
+      const track = await uploadTrack({ title, artist, audioFile, coverFile, userId: user?.id });
       
       clearInterval(progressInterval);
       setUploadProgress(100);
@@ -100,18 +102,20 @@ export default function UploadContent() {
     }
   };
 
-  if (guestMode) {
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-10 h-10 text-purple-500 animate-spin" />
+      </div>
+    );
+  }
+
+  // Guest mode - no Supabase configured
+  if (guestMode || !isSupabaseConfigured) {
     return (
       <div className="max-w-2xl mx-auto">
-        <Button
-          variant="ghost"
-          asChild
-          className="text-white/60 hover:text-white mb-6"
-        >
-          <Link href="/music">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Music
-          </Link>
+        <Button variant="ghost" asChild className="text-white/60 hover:text-white mb-6">
+          <Link href="/music"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Music</Link>
         </Button>
 
         <Card className="bg-white/5 border-white/10">
@@ -126,8 +130,7 @@ export default function UploadContent() {
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-white/60 mb-6">
-              Upload functionality requires cloud storage. Configure Supabase in your 
-              environment variables to enable uploads.
+              Upload functionality requires cloud storage. Configure Supabase in your environment variables.
             </p>
             <div className="flex gap-3 justify-center">
               <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10">
@@ -143,17 +146,41 @@ export default function UploadContent() {
     );
   }
 
+  // Not logged in
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <Button variant="ghost" asChild className="text-white/60 hover:text-white mb-6">
+          <Link href="/music"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Music</Link>
+        </Button>
+
+        <Card className="bg-white/5 border-white/10">
+          <CardHeader className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-500/20 flex items-center justify-center">
+              <LogIn className="w-8 h-8 text-purple-400" />
+            </div>
+            <CardTitle className="text-white text-2xl">Sign In Required</CardTitle>
+            <CardDescription className="text-white/60">
+              Sign in to upload your music
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-white/60 mb-6">
+              Create an account or sign in to start uploading your tracks.
+            </p>
+            <Button asChild className="bg-purple-500 hover:bg-purple-600">
+              <Link href="/music/login">Sign In</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
-      <Button
-        variant="ghost"
-        asChild
-        className="text-white/60 hover:text-white mb-6"
-      >
-        <Link href="/music">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Music
-        </Link>
+      <Button variant="ghost" asChild className="text-white/60 hover:text-white mb-6">
+        <Link href="/music"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Music</Link>
       </Button>
 
       <h1 className="text-3xl font-bold text-white mb-2">Upload Track</h1>
@@ -167,19 +194,11 @@ export default function UploadContent() {
           <CardContent className="space-y-4">
             <div>
               <Label htmlFor="audio" className="text-white/80">Audio File *</Label>
-              <input
-                ref={audioInputRef}
-                type="file"
-                accept=".mp3,.m4a,.wav,audio/mpeg,audio/mp3,audio/wav"
-                onChange={handleAudioSelect}
-                className="hidden"
-              />
+              <input ref={audioInputRef} type="file" accept=".mp3,.m4a,.wav,audio/mpeg,audio/mp3,audio/wav" onChange={handleAudioSelect} className="hidden" />
               <div 
                 onClick={() => audioInputRef.current?.click()}
                 className={`mt-2 border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors ${
-                  audioFile 
-                    ? 'border-purple-500/50 bg-purple-500/10' 
-                    : 'border-white/20 hover:border-purple-500/30 hover:bg-white/5'
+                  audioFile ? 'border-purple-500/50 bg-purple-500/10' : 'border-white/20 hover:border-purple-500/30 hover:bg-white/5'
                 }`}
               >
                 {audioFile ? (
@@ -202,43 +221,21 @@ export default function UploadContent() {
 
             <div>
               <Label htmlFor="title" className="text-white/80">Title *</Label>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Track title"
-                className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40"
-                required
-              />
+              <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Track title" className="mt-2 bg-white/5 border-white/10 text-white" required />
             </div>
 
             <div>
               <Label htmlFor="artist" className="text-white/80">Artist *</Label>
-              <Input
-                id="artist"
-                value={artist}
-                onChange={(e) => setArtist(e.target.value)}
-                placeholder="Artist name"
-                className="mt-2 bg-white/5 border-white/10 text-white placeholder:text-white/40"
-                required
-              />
+              <Input id="artist" value={artist} onChange={(e) => setArtist(e.target.value)} placeholder="Artist name" className="mt-2 bg-white/5 border-white/10 text-white" required />
             </div>
 
             <div>
               <Label htmlFor="cover" className="text-white/80">Cover Image (optional)</Label>
-              <input
-                ref={coverInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={handleCoverSelect}
-                className="hidden"
-              />
+              <input ref={coverInputRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={handleCoverSelect} className="hidden" />
               <div 
                 onClick={() => coverInputRef.current?.click()}
                 className={`mt-2 border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors ${
-                  coverFile 
-                    ? 'border-purple-500/50 bg-purple-500/10' 
-                    : 'border-white/20 hover:border-purple-500/30 hover:bg-white/5'
+                  coverFile ? 'border-purple-500/50 bg-purple-500/10' : 'border-white/20 hover:border-purple-500/30 hover:bg-white/5'
                 }`}
               >
                 {coverPreview ? (
@@ -275,8 +272,7 @@ export default function UploadContent() {
                   <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
                 )}
                 <span className="text-white">
-                  {uploadStatus === 'success' ? 'Upload complete!' : 
-                   uploadStatus === 'error' ? 'Upload failed' : 'Uploading...'}
+                  {uploadStatus === 'success' ? 'Upload complete!' : uploadStatus === 'error' ? 'Upload failed' : 'Uploading...'}
                 </span>
               </div>
               <Progress value={uploadProgress} className="h-2" />
@@ -284,22 +280,8 @@ export default function UploadContent() {
           </Card>
         )}
 
-        <Button
-          type="submit"
-          disabled={isUploading || !audioFile || !title || !artist}
-          className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg"
-        >
-          {isUploading ? (
-            <>
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              Uploading...
-            </>
-          ) : (
-            <>
-              <Upload className="w-5 h-5 mr-2" />
-              Upload Track
-            </>
-          )}
+        <Button type="submit" disabled={isUploading || !audioFile || !title || !artist} className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg">
+          {isUploading ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Uploading...</> : <><Upload className="w-5 h-5 mr-2" /> Upload Track</>}
         </Button>
       </form>
     </div>
