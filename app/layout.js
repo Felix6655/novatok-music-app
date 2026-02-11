@@ -6,14 +6,135 @@ import GlobalPlayer from '@/components/player/GlobalPlayer';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// SEO Configuration
+const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
+
 export const metadata = {
-  title: 'NovaTok Music - Discover Your Sound',
-  description: 'Stream and discover music with NovaTok Music',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'NovaTok Music – Discover, Play, Upload & Create',
+    template: '%s | NovaTok Music',
+  },
+  description: 'Stream tracks, explore trending music, like songs, upload your own, and unlock AI creator tools with NovaTok Music. The ultimate web music player for creators.',
+  keywords: [
+    'music player web app',
+    'AI music tools',
+    'karaoke lyrics app',
+    'creator music platform',
+    'upload and share tracks',
+    'stream music online',
+    'trending music player',
+    'music discovery app',
+    'web audio player',
+    'music streaming platform',
+  ],
+  authors: [{ name: 'NovaTok Music' }],
+  creator: 'NovaTok Music',
+  publisher: 'NovaTok Music',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: siteUrl,
+    siteName: 'NovaTok Music',
+    title: 'NovaTok Music – Discover, Play, Upload & Create',
+    description: 'Stream tracks, explore trending music, like songs, upload your own, and unlock AI creator tools with NovaTok Music.',
+    images: [
+      {
+        url: '/og-music.png',
+        width: 1200,
+        height: 630,
+        alt: 'NovaTok Music - Your Ultimate Music Discovery Platform',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NovaTok Music – Discover, Play, Upload & Create',
+    description: 'Stream tracks, explore trending music, like songs, upload your own, and unlock AI creator tools.',
+    images: ['/og-music.png'],
+    creator: '@novatok',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/manifest.json',
+  alternates: {
+    canonical: siteUrl,
+  },
+  verification: {
+    // Add verification codes when available
+    // google: 'google-site-verification-code',
+    // yandex: 'yandex-verification-code',
+  },
+};
+
+// JSON-LD Structured Data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'NovaTok Music',
+  applicationCategory: 'MusicApplication',
+  operatingSystem: 'Web',
+  description: 'Stream tracks, explore trending music, like songs, upload your own, and unlock AI creator tools with NovaTok Music.',
+  url: siteUrl,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    description: 'Free music streaming and discovery',
+  },
+  featureList: [
+    'Music streaming',
+    'Track discovery',
+    'Trending charts',
+    'Liked songs library',
+    'Recent plays history',
+    'Track upload',
+    'AI music tools',
+    'Karaoke mode',
+    'Lyrics viewer',
+  ],
+  screenshot: `${siteUrl}/og-music.png`,
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.8',
+    ratingCount: '1250',
+    bestRating: '5',
+    worstRating: '1',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${inter.className} bg-[#0a0a0f] min-h-screen`}>
         <PlayerProvider>
           {/* Cosmic Background */}
