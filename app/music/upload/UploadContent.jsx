@@ -243,7 +243,7 @@ export default function UploadContent() {
               >
                 {coverPreview ? (
                   <div className="flex items-center justify-center gap-4">
-                    <img src={coverPreview} alt="Cover preview" className="w-20 h-20 rounded-lg object-cover" />
+                    <img src={coverPreview} alt="Album cover preview" className="w-20 h-20 rounded-lg object-cover" />
                     <div className="text-left">
                       <p className="text-white font-medium">{coverFile.name}</p>
                       <p className="text-white/60 text-sm">Click to change</p>
