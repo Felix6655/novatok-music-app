@@ -22,6 +22,7 @@ const initialState = {
   isExpanded: false,
   repeat: 'off', // 'off', 'all', 'one'
   shuffle: false,
+  hasRestored: false,
 };
 
 function playerReducer(state, action) {
@@ -67,6 +68,7 @@ function playerReducer(state, action) {
     case 'TOGGLE_SHUFFLE':
       return { ...state, shuffle: !state.shuffle };
     case 'NEXT_TRACK':
+      if (state.queue.length === 0) return state;
       const nextIndex = state.shuffle 
         ? Math.floor(Math.random() * state.queue.length)
         : (state.queueIndex + 1) % state.queue.length;
@@ -75,10 +77,11 @@ function playerReducer(state, action) {
         queueIndex: nextIndex,
         currentTrack: state.queue[nextIndex] || null,
         currentTime: 0,
-        isPlaying: state.queue.length > 0,
-        isLoading: state.queue.length > 0,
+        isPlaying: true,
+        isLoading: true,
       };
     case 'PREV_TRACK':
+      if (state.queue.length === 0) return state;
       const prevIndex = state.queueIndex > 0 
         ? state.queueIndex - 1 
         : state.queue.length - 1;
@@ -87,8 +90,8 @@ function playerReducer(state, action) {
         queueIndex: prevIndex,
         currentTrack: state.queue[prevIndex] || null,
         currentTime: 0,
-        isPlaying: state.queue.length > 0,
-        isLoading: state.queue.length > 0,
+        isPlaying: true,
+        isLoading: true,
       };
     case 'ADD_TO_QUEUE':
       return {
@@ -122,7 +125,10 @@ function playerReducer(state, action) {
         ...action.payload,
         isPlaying: false, // Don't auto-play on restore
         isLoading: false,
+        hasRestored: true,
       };
+    case 'MARK_RESTORED':
+      return { ...state, hasRestored: true };
     default:
       return state;
   }
@@ -131,37 +137,79 @@ function playerReducer(state, action) {
 export function PlayerProvider({ children }) {
   const [state, dispatch] = useReducer(playerReducer, initialState);
   const audioRef = useRef(null);
-  const hasRestoredRef = useRef(false);
+  const hasInitializedRef = useRef(false);
+  const lastSrcRef = useRef(null);
+  const playAttemptRef = useRef(null);
+
+  // Create audio element once
+  useEffect(() => {
+    if (!audioRef.current && typeof window !== 'undefined') {
+      audioRef.current = new Audio();
+      audioRef.current.preload = 'metadata';
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   // Restore state from localStorage on mount
   useEffect(() => {
-    if (hasRestoredRef.current) return;
-    hasRestoredRef.current = true;
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
     
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        dispatch({ type: 'RESTORE_STATE', payload: parsed });
+        // Validate the restored state
+        if (parsed.currentTrack && parsed.queue) {
+          dispatch({ type: 'RESTORE_STATE', payload: parsed });
+        } else {
+          dispatch({ type: 'MARK_RESTORED' });
+        }
+      } else {
+        dispatch({ type: 'MARK_RESTORED' });
       }
     } catch (e) {
       console.error('Failed to restore player state:', e);
+      dispatch({ type: 'MARK_RESTORED' });
     }
   }, []);
 
-  // Save state to localStorage on changes
+  // Save state to localStorage on changes (debounced for currentTime)
   useEffect(() => {
+    if (!state.hasRestored) return;
+    
     const toSave = {
       currentTrack: state.currentTrack,
       queue: state.queue,
       queueIndex: state.queueIndex,
       volume: state.volume,
+      isMuted: state.isMuted,
       currentTime: state.currentTime,
       repeat: state.repeat,
       shuffle: state.shuffle,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-  }, [state.currentTrack, state.queue, state.queueIndex, state.volume, state.currentTime, state.repeat, state.shuffle]);
+  }, [state.currentTrack, state.queue, state.queueIndex, state.volume, state.isMuted, state.repeat, state.shuffle, state.hasRestored]);
+
+  // Save currentTime less frequently
+  useEffect(() => {
+    if (!state.hasRestored || !state.currentTrack) return;
+    const saveTimeout = setTimeout(() => {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        parsed.currentTime = state.currentTime;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+      }
+    }, 1000);
+    return () => clearTimeout(saveTimeout);
+  }, [state.currentTime, state.hasRestored, state.currentTrack]);
 
   // Audio element event handlers
   useEffect(() => {
@@ -175,12 +223,16 @@ export function PlayerProvider({ children }) {
     const handleLoadedMetadata = () => {
       dispatch({ type: 'SET_DURATION', payload: audio.duration });
       dispatch({ type: 'SET_LOADING', payload: false });
+      // Restore saved position if we have one
+      if (state.currentTime > 0 && audio.currentTime === 0) {
+        audio.currentTime = state.currentTime;
+      }
     };
 
     const handleEnded = () => {
       if (state.repeat === 'one') {
         audio.currentTime = 0;
-        audio.play();
+        audio.play().catch(() => {});
       } else if (state.queue.length > 1 || state.repeat === 'all') {
         dispatch({ type: 'NEXT_TRACK' });
       } else {
@@ -192,19 +244,20 @@ export function PlayerProvider({ children }) {
       console.error('Audio error:', e);
       dispatch({ type: 'SET_ERROR', payload: 'Audio unavailable' });
       toast.error('Audio unavailable', {
-        description: 'This track cannot be played. Skipping...',
+        description: 'This track cannot be played.',
       });
-      // Auto-skip after delay if there are more tracks
-      if (state.queue.length > 1) {
-        setTimeout(() => dispatch({ type: 'NEXT_TRACK' }), 2000);
-      }
     };
 
     const handleCanPlay = () => {
       dispatch({ type: 'SET_LOADING', payload: false });
-      if (state.isPlaying) {
-        audio.play().catch(() => {});
-      }
+    };
+
+    const handleWaiting = () => {
+      dispatch({ type: 'SET_LOADING', payload: true });
+    };
+
+    const handlePlaying = () => {
+      dispatch({ type: 'SET_LOADING', payload: false });
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -212,6 +265,8 @@ export function PlayerProvider({ children }) {
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('error', handleError);
     audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('waiting', handleWaiting);
+    audio.addEventListener('playing', handlePlaying);
 
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
@@ -219,28 +274,35 @@ export function PlayerProvider({ children }) {
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('error', handleError);
       audio.removeEventListener('canplay', handleCanPlay);
+      audio.removeEventListener('waiting', handleWaiting);
+      audio.removeEventListener('playing', handlePlaying);
     };
-  }, [state.isPlaying, state.repeat, state.queue.length]);
+  }, [state.repeat, state.queue.length, state.currentTime]);
 
-  // Sync audio element with state
+  // Sync audio source with current track
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !state.currentTrack) return;
 
-    if (state.currentTrack?.audio_url) {
-      if (audio.src !== state.currentTrack.audio_url) {
-        audio.src = state.currentTrack.audio_url;
-        audio.load();
-        // Record as recent play
-        addToRecent(state.currentTrack.id);
-        incrementPlayCount(state.currentTrack.id);
-      }
-    } else if (state.currentTrack) {
-      // Track has no audio URL
+    const audioUrl = state.currentTrack.audio_url;
+    
+    if (!audioUrl) {
       dispatch({ type: 'SET_ERROR', payload: 'Audio unavailable' });
       toast.error('Audio unavailable', {
         description: 'This track has no audio file.',
       });
+      return;
+    }
+
+    // Only change source if it's different
+    if (lastSrcRef.current !== audioUrl) {
+      lastSrcRef.current = audioUrl;
+      audio.src = audioUrl;
+      audio.load();
+      
+      // Record as recent play
+      addToRecent(state.currentTrack.id);
+      incrementPlayCount(state.currentTrack.id);
     }
   }, [state.currentTrack]);
 
@@ -249,14 +311,30 @@ export function PlayerProvider({ children }) {
     const audio = audioRef.current;
     if (!audio || !state.currentTrack?.audio_url) return;
 
+    // Cancel any pending play attempts
+    if (playAttemptRef.current) {
+      clearTimeout(playAttemptRef.current);
+    }
+
     if (state.isPlaying) {
-      audio.play().catch((e) => {
-        console.error('Play failed:', e);
-        dispatch({ type: 'PAUSE' });
-      });
+      playAttemptRef.current = setTimeout(() => {
+        audio.play().catch((e) => {
+          console.error('Play failed:', e);
+          // Only pause if it's an actual error, not a premature abort
+          if (e.name !== 'AbortError') {
+            dispatch({ type: 'PAUSE' });
+          }
+        });
+      }, 50);
     } else {
       audio.pause();
     }
+
+    return () => {
+      if (playAttemptRef.current) {
+        clearTimeout(playAttemptRef.current);
+      }
+    };
   }, [state.isPlaying, state.currentTrack]);
 
   // Handle volume
@@ -268,6 +346,8 @@ export function PlayerProvider({ children }) {
 
   // Actions
   const playTrack = useCallback((track, queue = null, index = 0) => {
+    if (!track) return;
+    
     if (queue) {
       dispatch({ type: 'SET_QUEUE', payload: { queue, index } });
     } else {
@@ -283,18 +363,27 @@ export function PlayerProvider({ children }) {
   }, [state.isPlaying]);
 
   const next = useCallback(() => dispatch({ type: 'NEXT_TRACK' }), []);
-  const previous = useCallback(() => dispatch({ type: 'PREV_TRACK' }), []);
+  const previous = useCallback(() => {
+    const audio = audioRef.current;
+    // If more than 3 seconds in, restart the track
+    if (audio && audio.currentTime > 3) {
+      audio.currentTime = 0;
+      dispatch({ type: 'SET_TIME', payload: 0 });
+    } else {
+      dispatch({ type: 'PREV_TRACK' });
+    }
+  }, []);
 
   const seek = useCallback((time) => {
     const audio = audioRef.current;
-    if (audio) {
+    if (audio && !isNaN(time)) {
       audio.currentTime = time;
       dispatch({ type: 'SET_TIME', payload: time });
     }
   }, []);
 
   const setVolume = useCallback((vol) => {
-    dispatch({ type: 'SET_VOLUME', payload: vol });
+    dispatch({ type: 'SET_VOLUME', payload: Math.max(0, Math.min(1, vol)) });
   }, []);
 
   const toggleMute = useCallback(() => dispatch({ type: 'TOGGLE_MUTE' }), []);
@@ -340,7 +429,6 @@ export function PlayerProvider({ children }) {
   return (
     <PlayerContext.Provider value={value}>
       {children}
-      <audio ref={audioRef} preload="metadata" />
     </PlayerContext.Provider>
   );
 }
