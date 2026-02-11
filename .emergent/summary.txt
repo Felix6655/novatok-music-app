@@ -1,98 +1,67 @@
 <analysis>
 
-**original_problem_statement**: The user wants to build a full, production-ready music streaming application called NovaTok Music V1.
+**original_problem_statement**: The user wants to build a full, production-ready music streaming application called NovaTok Music V1. The application should have two modes: a Guest Mode using local files and  (which is complete and functional), and a Production Mode using Supabase for authentication, storage, and database.
 
-The core requirements include:
-1.  **Full Production Implementation**: Build a real, working music app, not just a UI demo.
-2.  **Global Persistent Audio Player**: A single audio player that persists across all pages and on browser refresh, managing a queue and playback state in .
-3.  **Guest Mode**: A fallback mode using local demo audio files () and  for likes/recents when Supabase is not configured.
-4.  **Production Mode (Supabase)**:
-    *   **Authentication**: User login (email/password), account management.
-    *   **Storage**: Real audio and cover image uploads to Supabase Storage.
-    *   **Database**: User-specific data for uploaded tracks, likes, recent plays, and playlists.
-    *   **User Libraries**: A My Music page for users to manage their own uploaded tracks.
-    *   **Playlists**: Ability for users to create and manage playlists.
-    *   **Analytics**: A  to drive a Trending page.
-5.  **SEO**: Full SEO implementation including global metadata, dynamic sitemap, , JSON-LD structured data, and SEO-focused landing pages.
-6.  **UI/UX**: Keep the existing dark cosmic UI. Implement loading skeletons, empty states, and ensure mobile-friendliness.
+The user has requested the agent to complete the implementation of the Production Mode features, but without having access to the Supabase credentials. The agent's task is to make the application ready so that the user can simply add their credentials to the environment variables and have a fully working system.
+
+Additionally, the user requested:
+1.  A  page and  endpoint to check the application's configuration.
+2.  A marketing automation hook to trigger an  webhook every time a new track is uploaded.
+3.  Clear documentation on how to set up the Supabase environment and the marketing automation.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The project is a Next.js application with a dark cosmic theme. A significant amount of work has been completed:
-- A global, persistent audio player is implemented and functional.
-- The app runs in a Guest Mode using 8 local demo audio files stored in . Playback state, queue, likes, and recents are persisted in .
-- A comprehensive SEO implementation is complete, including dynamic , , JSON-LD schema, OG images, and multiple SEO-optimized landing pages (e.g., , ).
-- The foundation for the full production upgrade using Supabase has just been laid by writing numerous new files for authentication, user libraries, and playlists.
+The application is fully functional in Guest Mode, using local audio files and  for state. The code for all Production Mode features (Supabase Auth, Storage, DB queries) has been written.
+
+In this session, the following were added:
+- A setup guide  for the user.
+- A status page  and API endpoint  to show whether the app is in  or  mode.
+- A marketing webhook trigger in the  function, which POSTs track data to the  if the variable is set.
+- Documentation for the marketing hook in .
+- The application was verified to compile and run correctly in Guest Mode with all the new changes.
 
 **Last working item**:
-- **Last item agent was working**: The agent was in the middle of a major feature implementation: Upgrade NovaTok Music from a working demo into a REAL production-ready music platform. It had just finished a bulk-write operation, creating and modifying numerous files to add Supabase Authentication, Storage, user-specific track management (My Music), and a playlist system.
-- **Status**: IN PROGRESS
-- **Agent Testing Done**: N
-- **Which testing method agent to use?**: both. This is a large full-stack feature. The backend logic (Supabase client calls, server actions) and the new frontend pages/components (login, account, upload, playlists, my-tracks) require comprehensive testing. Screenshot testing will be crucial to verify UI and functionality.
+- **Last item agent was working**: Implementing an  marketing automation webhook trigger. The agent modified the  function in  to send a POST request to a webhook URL () upon successful track upload. The implementation fails gracefully if the environment variable is not set.
+- **Status**: USER VERIFICATION PENDING
+- **Agent Testing Done**: N (Cannot be tested without a full Supabase setup and a valid webhook URL).
+- **Which testing method agent to use?**: Manual testing by user. The user needs to set up Supabase, provide a valid , upload a track, and verify the webhook receives the data.
 - **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
 - **Issue 1: (P0)** Complete and verify the Production-Ready Platform upgrade.
-  - **Attempted fixes**: The agent has written all the necessary files for the upgrade, including a new SQL migration (), auth pages, and data services. However, the implementation is untested and incomplete.
-  - **Next debug checklist**:
-    1.  **CRITICAL BLOCKER**: The current implementation requires Supabase credentials ( and ). You **MUST** ask the user to provide these and add them to the  file before proceeding.
-    2.  Restart the Next.js server: nextjs: ERROR (not running)
-nextjs: started.
-    3.  Check the server logs for any compilation or runtime errors:   ▲ Next.js 14.2.3
-  - Local:        http://localhost:3000
-  - Network:      http://0.0.0.0:3000
-  - Environments: .env
-
- ✓ Starting...
-[?25h
-yarn run v1.22.22
-$ next dev --hostname 0.0.0.0 --port 3000
-  ▲ Next.js 14.2.3
-  - Local:        http://localhost:3000
-  - Network:      http://0.0.0.0:3000
-  - Environments: .env
-
- ✓ Starting....
-    4.  Verify the new authentication flow:
-        - Test the  and  pages.
-        - Attempt to sign up a new user.
-        - Attempt to log in and log out.
-    5.  Verify protected routes: Confirm that accessing  and  redirects unauthenticated users to the login page.
-    6.  Test the end-to-end upload flow as a logged-in user.
-    7.  Test the playlist functionality: create a playlist, add tracks, and view the playlist page.
-    8.  Verify the  page correctly displays tracks uploaded by the logged-in user.
-    9.  Thoroughly test that Guest Mode still works flawlessly when Supabase is not configured or the user is logged out.
-  - **Why fix this issue and what will be achieved with the fix?**: This will complete the main user request to transform the application from a demo into a fully functional, multi-user music platform with creator capabilities.
-  - **Status**: IN PROGRESS
+  - **Attempted fixes**: All necessary code for Supabase integration (Auth, Storage, DB), status checking, and marketing webhooks has been written. Comprehensive setup documentation () has been provided to the user.
+  - **Next debug checklist**: The next steps must be performed by the user, as the agent does not have the required credentials.
+    1.  User follows the instructions in  to set up their Supabase project (run SQL migrations, create storage buckets).
+    2.  User creates a  file and populates , , and optionally .
+    3.  User tests the full application flow as outlined in the setup guide (login, upload, playlist creation, etc.).
+    4.  User reports back to the agent with either success or specific errors encountered.
+  - **Why fix this issue and what will be achieved with the fix?**: This is the core requirement of the project. Completing this will transform the application from a demo into a fully functional, multi-user music platform.
+  - **Status**: BLOCKED
   - **Is recurring issue?**: N
   - **Should Test frontend/backend/both after fix?**: both
-  - **Blocked on other issue**: Yes, user provision of Supabase credentials.
+  - **Blocked on other issue**: Yes, blocked on the user setting up their environment and providing feedback.
 
 **In progress Task List**:
 - **Task 1: (P0)** Upgrade NovaTok Music to a REAL production-ready music platform.
-  - **Where to resume**: The agent has just written a large batch of files. The immediate next step is to resolve the blocker by asking the user for Supabase credentials. After setting the credentials, the agent should restart the server and begin the systematic testing outlined in the Next debug checklist above.
-  - **What will be achieved with this?**: A complete, production-ready music application with user accounts, uploads, playlists, and analytics, fulfilling the core project goal.
+  - **Where to resume**: The agent's work is paused. The next agent must wait for the user to complete their environment setup and report back. The agent has fulfilled all preparatory requests.
+  - **What will be achieved with this?**: A complete, production-ready music application with user accounts, uploads, and playlists.
   - **Status**: IN PROGRESS
   - **Should Test frontend/backend/both after fix?**: both
-  - **Blocked on something**: Supabase credentials (, ) are required from the user.
+  - **Blocked on something**: User action is required to provide credentials and test the setup.
 
 **Upcoming and Future Tasks**
-There are no other pending tasks. The current in-progress task encompasses all features requested by the user so far.
+There are no other pending tasks. The current in-progress task encompasses all features requested by the user.
 
 **Completed work in this session**
-- **Global Persistent Audio Player**: Implemented a global player using a React Context/Store that persists playback state across navigation and browser refresh using .
-- **Local Demo Audio**: Replaced external audio dependencies by generating 8 local  files with  and storing them in . Updated the seed data () to use these local files for Guest Mode.
-- **Comprehensive SEO Implementation**:
-  - Added global metadata, OpenGraph, and Twitter cards to .
-  - Created dynamic  and  routes.
-  - Implemented  JSON-LD structured data.
-  - Added SEO-focused content pages like , , etc.
-  - Added social sharing images () and favicons to .
-- **Environment Variable Standardization**: Refactored the entire application to use a single canonical URL variable, , and removed . Improved URL fallback logic for development and production environments.
+- **Supabase Setup Documentation**: Created  with a detailed checklist for the user to configure their Supabase project.
+- **Application Status Endpoint**: Created a status page at  and an API endpoint at  to report if the app is running in guest or supabase mode.
+- **Marketing Automation Webhook**: Integrated an  webhook trigger into the track upload process in .
+- **Marketing Documentation**: Created  to explain the new webhook feature.
+- **Guest Mode Verification**: Confirmed that all new changes did not break the existing Guest Mode functionality. The app remains fully operational without Supabase credentials.
 
 **Earlier issues found/mentioned but not fixed**
-None. The agent has addressed all user requests and issues as they were raised.
+None.
 
 **Known issue recurrence from previous fork**
 None.
@@ -102,85 +71,65 @@ None.
 
 **Key Technical Concepts**
 -   **Framework**: Next.js 14+ (App Router)
--   **Styling**: Tailwind CSS with shadcn/ui components.
--   **State Management**: React Context API () for global audio player state, persisted to .
--   **Backend**: Supabase
-    -   **Database**: PostgreSQL for storing user data, tracks, likes, playlists, etc.
-    -   **Authentication**: Supabase Auth for user sign-up and login.
-    -   **Storage**: Supabase Storage for hosting user-uploaded audio and cover images.
--   **Data Fetching**: Server Components for initial data load, Client Components for interactive elements. Server Actions () for mutations (likes, playlist updates, etc.).
+-   **Styling**: Tailwind CSS, shadcn/ui
+-   **State Management**: React Context API, 
+-   **Backend**: Supabase (PostgreSQL, Auth, Storage)
+-   **Data Fetching**: Server Actions, Server Components
+-   **Marketing Automation**: Outbound webhooks (e.g., to n8n)
 
 **key DB schema**
--   **music_tracks**: uid=0(root) gid=0(root) groups=0(root), , , , , , 
--   **music_likes**: , 
--   **music_recent**: , , 
--   **profiles**: uid=0(root) gid=0(root) groups=0(root) (FK to auth.users), , 
--   **music_playlists**: uid=0(root) gid=0(root) groups=0(root), , 
--   **music_playlist_tracks**: , 
--   **music_track_stats**: , 
+No changes were made to the database schema in this session. The existing schema defined in  and  is ready for the user to migrate.
 
 **changes in tech stack**
-No changes to the core stack. The project is solidifying its use of Next.js and Supabase.
+- An outbound webhook integration was added, intended for services like .
 
 **All files of reference**
-*   **/app/supabase/migrations/002_production_upgrade.sql**: Defines the new tables for production features (playlists, track stats, profiles).
-*   **/app/lib/data/data-service.js**: Heavily modified to include functions for interacting with the new Supabase tables (fetching user tracks, playlists, handling uploads).
-*   **/app/lib/actions.js**: Contains new server actions for production features like creating playlists and incrementing play counts.
-*   **/app/app/music/(auth)/**: New pages for Login () and Account management ().
-*   **/app/app/music/(library)/**: New pages for user-specific content:  and .
-*   **/app/app/music/upload/page.js & UploadContent.jsx**: Updated to handle the real authenticated upload flow.
-*   **/app/components/AuthListener.jsx**: New client component to listen for Supabase auth state changes and update the session.
-*   **/app/components/TabsNav.jsx**: Updated to include new navigation links like My Music and Account.
-*   **/app/lib/supabase/client.js & server.js**: Core files for creating Supabase clients for use in client and server components, respectively.
+-   **Created**:
+    -   : Provides the user with step-by-step instructions to configure their Supabase project.
+    -   : Documents the new marketing webhook feature.
+    -   : The frontend for the new status page.
+    -   : The API endpoint for the new status check.
+-   **Updated**:
+    -   : Modified the  function to include the n8n webhook trigger.
+    -   : Added the  environment variable.
 
 **Areas that need refactoring**:
-None at this time. The agent has been proactive in maintaining a clean structure, such as creating wrapper components for SEO metadata on client-rendered pages.
+None.
 
 **key api endpoints**
-The application primarily uses Next.js Server Actions defined in  instead of traditional REST API endpoints. Key actions include , , , and .
+- : A new endpoint that returns the application's current operating mode ( or ) and configuration status.
 
 **Critical Info for New Agent**
-1.  **SUPABASE CREDENTIALS REQUIRED**: You are blocked. The immediate next action MUST be to ask the user for  and . The entire in-progress task depends on these.
-2.  **IN-PROGRESS IMPLEMENTATION**: A major feature set has been coded but is completely untested. After getting the keys, restart the server and begin a thorough, step-by-step verification of all new features (Auth, Upload, Playlists, My Music).
-3.  **GUEST MODE IS ESSENTIAL**: The user has stressed the importance of the Guest Mode fallback. As you test the new production features, continuously verify that the app remains fully functional for logged-out users or when Supabase is not configured.
+1.  **YOU ARE BLOCKED ON THE USER**: Do not attempt to proceed with any implementation. Your primary role is to wait for the user to follow the instructions in , configure their environment, and test the application.
+2.  **PREPARE FOR DEBUGGING**: The user will likely return with either a success message or an error. Be prepared to analyze logs and debug issues related to the Supabase integration once the user provides feedback. The untested code is in , , and the various pages under .
+3.  **DO NOT BREAK GUEST MODE**: All changes must be made in a way that preserves the fully functional Guest Mode. The  page is your first checkpoint to verify the application's state.
 
 **documents created in this job**
-- : Documents all required environment variables.
-- : A checklist for production deployment.
-- : Initial schema for tracks, likes, and recents.
-- : Schema additions for playlists, user profiles, and track stats.
+- 
+- 
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **Request (Pending)**: Upgrade NovaTok to a full production platform with Supabase Auth, Storage, User Libraries, Playlists, and real analytics.
-2.  **Request (Completed)**: Refine the site URL fallback logic to be safer for development and production.
-3.  **Request (Completed)**: Standardize all code to use  and remove the obsolete .
-4.  **Request (Completed)**: Implement a full suite of production SEO features, including metadata, sitemaps, and structured data.
-5.  **Request (Completed)**: Replace external demo audio links with locally hosted audio files to improve reliability and remove external dependencies.
-6.  **Request (Completed)**: Build the V1 of the NovaTok music app, focusing on the global persistent player and functional UI (Guest Mode).
-7.  **Request (Completed)**: Show a preview of the NovaTok music app.
+1.  **Request (In Progress)**: Add an n8n webhook trigger on track upload for marketing automation and document it.
+2.  **Request (Completed)**: Provide exact  variable names, the SQL migration file path, a local test procedure, and a  page. Explicitly stated that Supabase keys will *not* be provided in chat.
 
 **Project Health Check:**
-- **Broken**: The application is currently in a broken state. A large number of files related to Supabase integration have been written, but the required environment variables are missing, and the server has not been restarted or tested. It will not work until the Supabase credentials are provided and the server is restarted.
-- **Mocked**: The Guest Mode is fully functional and uses mock/demo data from  and local audio files, as intended.
+- **Broken**: The primary Production Mode feature set is non-functional as it is not configured. The code has been written but is untested and will fail until the user provides the necessary Supabase credentials.
+- **Mocked**: Guest Mode is fully functional, stable, and serves as the application's working baseline.
 
 **3rd Party Integrations**
--   **Supabase**: Used for PostgreSQL Database, Authentication, and Storage. Requires user-provided  and .
+-   **Supabase**: Used for Database, Authentication, and Storage. Requires user-provided  and .
+-   **n8n (or any webhook service)**: A webhook is triggered on track upload. Requires a user-provided .
 
 **Testing status**
--   **Testing agent used after significant changes**: YES (The agent uses the screenshot tool extensively to manually verify UI changes and functionality).
+-   **Testing agent used after significant changes**: YES (The agent used the screenshot tool to manually verify the new status page and confirm Guest Mode was not broken).
 -   **Troubleshoot agent used after agent stuck in loop**: NO
--   **Test files created**: None. All testing is manual via UI interaction and screenshot verification.
+-   **Test files created**: None.
 -   **Known regressions**: None.
 
 **Credentials to test flow:**
-You must ask the user for Supabase project credentials ( and ) to test the production flow. Guest mode does not require any credentials.
+The agent does not have credentials. The user is responsible for providing their own Supabase and webhook credentials in their local or deployment environment.
 
 **What agent forgot to execute**
-The agent failed to ask the user for the essential Supabase credentials ( and ) before starting the implementation of features that depend entirely on them. This is the primary blocker for the next agent.
+The agent successfully executed all tasks requested by the user in this session. The primary blocker from the previous session (not asking for keys) was resolved by shifting the responsibility to the user and providing clear documentation.
 
 </analysis>
-<SYS_PROMPT_SEPARATOR>
-<workspace_dir>
-/app
-</workspace_dir>
-
