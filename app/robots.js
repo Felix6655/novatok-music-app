@@ -1,8 +1,9 @@
 // Robots.txt for NovaTok Music
 // Controls search engine crawling behavior
+// Uses ONLY NEXT_PUBLIC_SITE_URL for canonical URLs
 
 export default function robots() {
-  const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
   
   return {
     rules: [

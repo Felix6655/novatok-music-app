@@ -6,8 +6,8 @@ import GlobalPlayer from '@/components/player/GlobalPlayer';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// SEO Configuration
-const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
+// SEO Configuration - Use ONLY NEXT_PUBLIC_SITE_URL
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),

@@ -1,8 +1,9 @@
 // Dynamic Sitemap for NovaTok Music
 // Generates XML sitemap for search engine indexing
+// Uses ONLY NEXT_PUBLIC_SITE_URL for canonical URLs
 
 export default function sitemap() {
-  const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novatok.music';
   
   const routes = [
     {
