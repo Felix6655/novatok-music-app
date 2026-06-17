@@ -139,6 +139,7 @@ export function PlayerProvider({ children }) {
   const audioRef = useRef(null);
   const hasInitializedRef = useRef(false);
   const lastSrcRef = useRef(null);
+  const lastTrackIdRef = useRef(null);
   const playAttemptRef = useRef(null);
 
   // Create audio element once
@@ -294,12 +295,16 @@ export function PlayerProvider({ children }) {
       return;
     }
 
-    // Only change source if it's different
-    if (lastSrcRef.current !== audioUrl) {
+    // Reload whenever the track itself changes, even if two different tracks
+    // happen to share the same underlying audio file - otherwise playback
+    // resumes from the previous track's leftover position (which can be at
+    // or near the end, making the "new" track appear to play silently).
+    if (lastSrcRef.current !== audioUrl || lastTrackIdRef.current !== state.currentTrack.id) {
       lastSrcRef.current = audioUrl;
+      lastTrackIdRef.current = state.currentTrack.id;
       audio.src = audioUrl;
       audio.load();
-      
+
       // Record as recent play
       addToRecent(state.currentTrack.id);
       incrementPlayCount(state.currentTrack.id);
