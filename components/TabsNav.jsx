@@ -12,12 +12,12 @@ const tabs = [
   { id: 'trending', label: 'Trending', icon: TrendingUp, href: '/music/trending' },
   { id: 'liked', label: 'Liked', icon: Heart, href: '/music/liked' },
   { id: 'recent', label: 'Recent', icon: Clock, href: '/music/recent' },
+  { id: 'ai-studio', label: 'Create with AI', icon: Wand2, href: '/music/ai-studio' },
   { id: 'playlists', label: 'Playlists', icon: ListMusic, href: '/music/playlists', authRequired: true },
   { id: 'my-tracks', label: 'My Tracks', icon: Music2, href: '/music/my-tracks', authRequired: true },
   { id: 'upload', label: 'Upload', icon: Upload, href: '/music/upload' },
   { id: 'lyrics', label: 'Lyrics', icon: FileText, href: '/music/lyrics' },
   { id: 'karaoke', label: 'Karaoke', icon: Mic, href: '/music/karaoke' },
-  { id: 'ai-studio', label: 'AI Studio', icon: Wand2, href: '/music/ai-studio' },
 ];
 
 export default function TabsNav() {
