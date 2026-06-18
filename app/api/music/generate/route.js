@@ -1,83 +1,92 @@
 import { NextResponse } from 'next/server';
 
-// Known NovaTok MusicGen worker (Hugging Face Space).
+// Known NovaTok MusicGen worker (Hugging Face Space, Gradio 4.0.0).
 // Can be overridden via env if the worker moves.
 const DEFAULT_WORKER_URL = 'https://fico2938-novatok-musicgen-worker.hf.space';
 const WORKER_URL = (process.env.MUSICGEN_WORKER_URL || process.env.NEXT_PUBLIC_MUSICGEN_WORKER_URL || DEFAULT_WORKER_URL).replace(/\/$/, '');
-const WORKER_TIMEOUT_MS = 45000;
+const WORKER_TIMEOUT_MS = 90000;
 
-const fetchWithTimeout = async (url, options, timeoutMs) => {
+// The Space's "Duration (seconds)" slider only accepts 5-30 in steps of 5.
+const clampDuration = (duration) => {
+  const n = Number(duration) || 15;
+  const stepped = Math.round(n / 5) * 5;
+  return Math.min(30, Math.max(5, stepped));
+};
+
+// Calls the worker's Gradio queue API directly (POST /run or /call/* aren't
+// supported by this Space's Gradio version - it requires joining the SSE
+// queue at /queue/join, then posting the job to /queue/data, then reading
+// the result off the same SSE stream). Verified against the live worker.
+const callWorker = async (fullPrompt, duration) => {
+  const sessionHash = `novatok_${Date.now()}_${Math.random().toString(36).slice(2)}`;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const timer = setTimeout(() => controller.abort(), WORKER_TIMEOUT_MS);
+
   try {
-    return await fetch(url, { ...options, signal: controller.signal });
+    const joinRes = await fetch(
+      `${WORKER_URL}/queue/join?fn_index=0&session_hash=${sessionHash}`,
+      { headers: { Accept: 'text/event-stream' }, signal: controller.signal }
+    );
+
+    if (!joinRes.ok || !joinRes.body) return null;
+
+    const reader = joinRes.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let posted = false;
+    let result = null;
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      const parts = buffer.split('\n\n');
+      buffer = parts.pop();
+
+      for (const part of parts) {
+        const line = part.split('\n').find((l) => l.startsWith('data:'));
+        if (!line) continue;
+
+        let event;
+        try {
+          event = JSON.parse(line.slice(5).trim());
+        } catch {
+          continue;
+        }
+
+        if (event.msg === 'send_data' && !posted) {
+          posted = true;
+          await fetch(`${WORKER_URL}/queue/data`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              data: [fullPrompt, duration],
+              event_id: event.event_id,
+              fn_index: 0,
+              session_hash: sessionHash,
+            }),
+            signal: controller.signal,
+          });
+        }
+
+        if (event.msg === 'process_completed') {
+          const fileData = event.output?.data?.[0];
+          if (fileData && event.success !== false) {
+            result = fileData.url || (fileData.path ? `${WORKER_URL}/file=${fileData.path}` : null);
+          }
+          return result;
+        }
+      }
+    }
+
+    return result;
+  } catch (error) {
+    console.error('MusicGen worker call failed:', error.message);
+    return null;
   } finally {
     clearTimeout(timer);
   }
-};
-
-const resolveAudioUrl = (value) => {
-  if (!value || typeof value !== 'string') return null;
-  if (value.startsWith('http://') || value.startsWith('https://')) return value;
-  if (value.startsWith('data:audio')) return value;
-  return `${WORKER_URL}${value.startsWith('/') ? '' : '/'}${value}`;
-};
-
-// Extract an audio URL/base64 from whatever shape the worker responds with.
-const extractAudioUrl = (payload) => {
-  if (!payload) return null;
-  const candidates = [
-    payload.audio_url,
-    payload.url,
-    payload.output,
-    payload.audio,
-    Array.isArray(payload.data) ? payload.data[0] : null,
-    Array.isArray(payload.data) && payload.data[0]?.name ? payload.data[0].name : null,
-    Array.isArray(payload.data) && payload.data[0]?.url ? payload.data[0].url : null,
-  ];
-  for (const candidate of candidates) {
-    const resolved = resolveAudioUrl(candidate);
-    if (resolved) return resolved;
-  }
-  return null;
-};
-
-const callWorker = async (fullPrompt, duration) => {
-  // Try the simple REST contract first.
-  try {
-    const res = await fetchWithTimeout(`${WORKER_URL}/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: fullPrompt, duration }),
-    }, WORKER_TIMEOUT_MS);
-
-    if (res.ok) {
-      const data = await res.json();
-      const audioUrl = extractAudioUrl(data);
-      if (audioUrl) return audioUrl;
-    }
-  } catch {
-    // fall through to Gradio-style contract
-  }
-
-  // Fall back to a Gradio-style predict contract.
-  try {
-    const res = await fetchWithTimeout(`${WORKER_URL}/run/predict`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: [fullPrompt, duration] }),
-    }, WORKER_TIMEOUT_MS);
-
-    if (res.ok) {
-      const data = await res.json();
-      const audioUrl = extractAudioUrl(data);
-      if (audioUrl) return audioUrl;
-    }
-  } catch {
-    // worker is unreachable or returned something we can't parse
-  }
-
-  return null;
 };
 
 export async function POST(request) {
@@ -95,9 +104,10 @@ export async function POST(request) {
   }
 
   const fullPrompt = [prompt.trim(), mood, genre].filter(Boolean).join(', ');
+  const clampedDuration = clampDuration(duration);
 
   try {
-    const audioUrl = await callWorker(fullPrompt, duration || 15);
+    const audioUrl = await callWorker(fullPrompt, clampedDuration);
 
     if (audioUrl) {
       return NextResponse.json({
@@ -108,7 +118,7 @@ export async function POST(request) {
           prompt: fullPrompt,
           mood: mood || null,
           genre: genre || null,
-          duration_sec: duration || 15,
+          duration_sec: clampedDuration,
         },
       });
     }
