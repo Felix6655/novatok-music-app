@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 
+// Generation + queue wait on the worker can take well over a minute.
+export const maxDuration = 280;
+
 // Known NovaTok MusicGen worker (Hugging Face Space, Gradio 4.0.0).
 // Can be overridden via env if the worker moves.
 const DEFAULT_WORKER_URL = 'https://fico2938-novatok-musicgen-worker.hf.space';
 const WORKER_URL = (process.env.MUSICGEN_WORKER_URL || process.env.NEXT_PUBLIC_MUSICGEN_WORKER_URL || DEFAULT_WORKER_URL).replace(/\/$/, '');
-const WORKER_TIMEOUT_MS = 90000;
+const WORKER_TIMEOUT_MS = 180000;
 
 // The Space's "Duration (seconds)" slider only accepts 5-30 in steps of 5.
 const clampDuration = (duration) => {
